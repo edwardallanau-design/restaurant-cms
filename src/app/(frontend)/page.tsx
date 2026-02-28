@@ -5,7 +5,7 @@ import { CACHE_TAGS } from '@/lib/cache'
 import { HeroSection } from '@/components/home/HeroSection'
 import { FeaturedMenu } from '@/components/home/FeaturedMenu'
 import { GalleryPreview } from '@/components/home/GalleryPreview'
-import type { Media, SiteSettings } from '@/payload-types'
+import type { Media } from '@/payload-types'
 
 // ── Cached data fetchers ────────────────────────────────────────────────────
 

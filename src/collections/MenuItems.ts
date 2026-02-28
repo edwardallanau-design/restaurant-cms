@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/cache'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
 
 export const MenuItems: CollectionConfig = {
   slug: 'menu-items',
@@ -129,12 +129,12 @@ export const MenuItems: CollectionConfig = {
   hooks: {
     afterChange: [
       () => {
-        revalidateTag(CACHE_TAGS.menu)
+        safeRevalidateTag(CACHE_TAGS.menu)
       },
     ],
     afterDelete: [
       () => {
-        revalidateTag(CACHE_TAGS.menu)
+        safeRevalidateTag(CACHE_TAGS.menu)
       },
     ],
   },

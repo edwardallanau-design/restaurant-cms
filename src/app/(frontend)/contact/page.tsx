@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
-import { Container } from '@/components/ui/Container'
-import { Section } from '@/components/ui/Section'
+import { Container } from '@/components/custom/Container'
+import { Section } from '@/components/custom/Section'
 import { ContactForm } from '@/components/contact/ContactForm'
 
 export const metadata: Metadata = {

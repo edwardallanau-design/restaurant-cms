@@ -16,8 +16,13 @@ dist/
 .env.test.local
 .env.production.local
 
-# Payload generated types (regenerated on build)
+# Payload generated files (regenerated on build)
 src/payload-types.ts
+src/generated-schema.graphql
+src/app/(payload)/admin/importMap.js
+
+# Claude Code session data
+.claude/
 
 # Media uploads (local dev only — use Vercel Blob in production)
 public/media

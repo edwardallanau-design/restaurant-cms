@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MobileNav } from './MobileNav'
-import type { SiteSettings as SiteSettingsType } from '@/payload-types'
-import { Container } from '@/components/ui/Container'
+import type { SiteSetting as SiteSettingsType } from '@/payload-types'
+import { Container } from '@/components/custom/Container'
 
 interface HeaderProps {
   settings: Pick<SiteSettingsType, 'restaurantName' | 'logo' | 'navigation'>

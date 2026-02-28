@@ -4,16 +4,14 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
-import {
-  Events,
-  GalleryImages,
-  Media,
-  MenuCategories,
-  MenuItems,
-  Users,
-} from './collections'
-import { HeroSection, SiteSettings } from './globals'
-import { env } from './env'
+import { Events } from './collections/Events.ts'
+import { GalleryImages } from './collections/GalleryImages.ts'
+import { Media } from './collections/Media.ts'
+import { MenuCategories } from './collections/MenuCategories.ts'
+import { MenuItems } from './collections/MenuItems.ts'
+import { Users } from './collections/Users.ts'
+import { HeroSection } from './globals/HeroSection.ts'
+import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,7 +22,9 @@ export default buildConfig({
     user: Users.slug,
     meta: {
       titleSuffix: '— Restaurant CMS',
-      favicon: '/favicon.ico',
+    },
+    importMap: {
+      baseDir: path.resolve(dirname, 'app/(payload)/admin'),
     },
     // Redirect to admin on first load
     components: {},
@@ -42,13 +42,11 @@ export default buildConfig({
   // ── Database (Neon PostgreSQL) ───────────────────────────────────────────────
   db: postgresAdapter({
     pool: {
-      connectionString: env.DATABASE_URL,
+      connectionString: process.env['DATABASE_URL']!,
       // Neon's serverless driver handles connection pooling on its side.
       // Keep pool size small for Vercel serverless functions.
       max: 10,
     },
-    // Auto-run migrations on startup in production (safe because Payload tracks migration state)
-    prodMigrations: process.env['NODE_ENV'] === 'production',
   }),
 
   // ── File Storage ─────────────────────────────────────────────────────────────
@@ -68,11 +66,11 @@ export default buildConfig({
   ],
 
   // ── Security ────────────────────────────────────────────────────────────────
-  secret: env.PAYLOAD_SECRET,
+  secret: process.env['PAYLOAD_SECRET']!,
 
   // ── CORS & CSRF ─────────────────────────────────────────────────────────────
-  cors: [env.NEXT_PUBLIC_SERVER_URL, 'http://localhost:3000'].filter(Boolean),
-  csrf: [env.NEXT_PUBLIC_SERVER_URL, 'http://localhost:3000'].filter(Boolean),
+  cors: [process.env['NEXT_PUBLIC_SERVER_URL'], 'http://localhost:3000'].filter(Boolean) as string[],
+  csrf: [process.env['NEXT_PUBLIC_SERVER_URL'], 'http://localhost:3000'].filter(Boolean) as string[],
 
   // ── TypeScript ───────────────────────────────────────────────────────────────
   typescript: {
@@ -85,7 +83,7 @@ export default buildConfig({
   },
 
   // ── Misc ────────────────────────────────────────────────────────────────────
-  serverURL: env.NEXT_PUBLIC_SERVER_URL,
+  serverURL: process.env['NEXT_PUBLIC_SERVER_URL'] ?? 'http://localhost:3000',
   routes: {
     admin: '/admin',
     api: '/api',

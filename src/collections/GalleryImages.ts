@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/cache'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
 
 export const GalleryImages: CollectionConfig = {
   slug: 'gallery-images',
@@ -55,13 +55,13 @@ export const GalleryImages: CollectionConfig = {
   hooks: {
     afterChange: [
       () => {
-        revalidateTag(CACHE_TAGS.gallery)
-        revalidateTag(CACHE_TAGS.media)
+        safeRevalidateTag(CACHE_TAGS.gallery)
+        safeRevalidateTag(CACHE_TAGS.media)
       },
     ],
     afterDelete: [
       () => {
-        revalidateTag(CACHE_TAGS.gallery)
+        safeRevalidateTag(CACHE_TAGS.gallery)
       },
     ],
   },

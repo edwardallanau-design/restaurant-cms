@@ -3,9 +3,9 @@ import { unstable_cache } from 'next/cache'
 import Image from 'next/image'
 import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
-import { Container } from '@/components/ui/Container'
-import { Section } from '@/components/ui/Section'
-import type { Media, MenuCategory, MenuItem } from '@/payload-types'
+import { Container } from '@/components/custom/Container'
+import { Section } from '@/components/custom/Section'
+import type { Media, MenuItem } from '@/payload-types'
 
 export const metadata: Metadata = {
   title: 'Menu',
@@ -56,7 +56,7 @@ export default async function MenuPage() {
   const itemsByCategory = new Map<string, MenuItem[]>()
   for (const item of items) {
     const catId =
-      typeof item.category === 'object' ? item.category.id : item.category
+      typeof item.category === 'object' ? String(item.category.id) : String(item.category ?? '')
     if (!catId) continue
     const existing = itemsByCategory.get(catId) ?? []
     existing.push(item)
@@ -85,13 +85,13 @@ export default async function MenuPage() {
       <Section className="bg-white">
         <Container>
           {categories.map((category) => {
-            const catItems = itemsByCategory.get(category.id) ?? []
+            const catItems = itemsByCategory.get(String(category.id)) ?? []
             if (!catItems.length) return null
 
             return (
               <div
                 key={category.id}
-                id={category.slug ?? category.id}
+                id={String(category.slug ?? category.id)}
                 className="mb-16 last:mb-0 scroll-mt-24"
               >
                 {/* Category heading */}

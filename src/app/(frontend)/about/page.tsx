@@ -3,9 +3,9 @@ import { unstable_cache } from 'next/cache'
 import Image from 'next/image'
 import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
-import { Container } from '@/components/ui/Container'
-import { Section } from '@/components/ui/Section'
-import { ButtonLink } from '@/components/ui/Button'
+import { Container } from '@/components/custom/Container'
+import { Section } from '@/components/custom/Section'
+import { ButtonLink } from '@/components/custom/Button'
 import type { Media } from '@/payload-types'
 
 export const metadata: Metadata = {

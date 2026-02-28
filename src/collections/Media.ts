@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/cache'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -59,7 +59,7 @@ export const Media: CollectionConfig = {
   hooks: {
     afterChange: [
       () => {
-        revalidateTag(CACHE_TAGS.media)
+        safeRevalidateTag(CACHE_TAGS.media)
       },
     ],
   },

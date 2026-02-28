@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/cache'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
 
 export const HeroSection: GlobalConfig = {
   slug: 'hero-section',
@@ -121,7 +121,7 @@ export const HeroSection: GlobalConfig = {
   hooks: {
     afterChange: [
       () => {
-        revalidateTag(CACHE_TAGS.hero)
+        safeRevalidateTag(CACHE_TAGS.hero)
       },
     ],
   },

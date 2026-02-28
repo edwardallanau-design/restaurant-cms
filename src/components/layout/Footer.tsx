@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import type { SiteSettings } from '@/payload-types'
-import { Container } from '@/components/ui/Container'
+import type { SiteSetting } from '@/payload-types'
+import { Container } from '@/components/custom/Container'
 
 interface FooterProps {
   settings: Pick<
-    SiteSettings,
+    SiteSetting,
     'restaurantName' | 'contact' | 'hours' | 'socialLinks' | 'navigation'
   >
 }

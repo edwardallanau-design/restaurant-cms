@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
-import { revalidateTag } from 'next/cache'
-import { CACHE_TAGS } from '@/lib/cache'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -264,7 +264,7 @@ export const SiteSettings: GlobalConfig = {
   hooks: {
     afterChange: [
       () => {
-        revalidateTag(CACHE_TAGS.settings)
+        safeRevalidateTag(CACHE_TAGS.settings)
       },
     ],
   },

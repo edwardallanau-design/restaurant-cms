@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import type { GalleryImage, Media } from '@/payload-types'
-import { Container } from '@/components/ui/Container'
-import { Section } from '@/components/ui/Section'
-import { ButtonLink } from '@/components/ui/Button'
+import { Container } from '@/components/custom/Container'
+import { Section } from '@/components/custom/Section'
+import { ButtonLink } from '@/components/custom/Button'
 
 interface GalleryPreviewProps {
   images: GalleryImage[]

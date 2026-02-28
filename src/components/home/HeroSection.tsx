@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import type { HeroSection as HeroSectionType, Media } from '@/payload-types'
-import { ButtonLink } from '@/components/ui/Button'
-import { Container } from '@/components/ui/Container'
+import { ButtonLink } from '@/components/custom/Button'
+import { Container } from '@/components/custom/Container'
 
 type HeroSectionProps = Pick<
   HeroSectionType,

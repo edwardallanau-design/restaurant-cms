@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 import { submitContactForm, type ContactFormState } from '@/lib/actions/contact'
-import { Button } from '@/components/ui/Button'
+import { Button } from '@/components/custom/Button'
 
 const initialState: ContactFormState = { status: 'idle' }
 

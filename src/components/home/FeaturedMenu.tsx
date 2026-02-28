@@ -1,9 +1,8 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import type { MenuItem, Media } from '@/payload-types'
-import { Container } from '@/components/ui/Container'
-import { Section } from '@/components/ui/Section'
-import { ButtonLink } from '@/components/ui/Button'
+import { Container } from '@/components/custom/Container'
+import { Section } from '@/components/custom/Section'
+import { ButtonLink } from '@/components/custom/Button'
 
 interface FeaturedMenuProps {
   items: MenuItem[]
