@@ -7,17 +7,8 @@ import { MobileNav } from './MobileNav'
 import type { SiteSettings as SiteSettingsType } from '@/payload-types'
 import { Container } from '@/components/ui/Container'
 
-const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/menu', label: 'Menu' },
-  { href: '/gallery', label: 'Gallery' },
-  { href: '/events', label: 'Events' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
-] as const
-
 interface HeaderProps {
-  settings: Pick<SiteSettingsType, 'restaurantName' | 'logo'>
+  settings: Pick<SiteSettingsType, 'restaurantName' | 'logo' | 'navigation'>
 }
 
 export function Header({ settings }: HeaderProps) {
@@ -68,7 +59,7 @@ export function Header({ settings }: HeaderProps) {
 
             {/* Desktop nav */}
             <ul className="hidden items-center gap-8 md:flex">
-              {NAV_LINKS.map(({ href, label }) => (
+              {(settings.navigation ?? []).map(({ href, label }) => (
                 <li key={href}>
                   <Link
                     href={href}
@@ -98,7 +89,7 @@ export function Header({ settings }: HeaderProps) {
       </header>
 
       <MobileNav
-        links={NAV_LINKS}
+        links={settings.navigation ?? []}
         isOpen={mobileOpen}
         onClose={() => setMobileOpen(false)}
         restaurantName={settings.restaurantName ?? 'Restaurant'}

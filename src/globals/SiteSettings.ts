@@ -39,6 +39,44 @@ export const SiteSettings: GlobalConfig = {
       relationTo: 'media',
       label: 'Logo',
     },
+    // ── Navigation ────────────────────────────────────────────────────────────
+    {
+      name: 'navigation',
+      type: 'array',
+      label: 'Navigation Links',
+      admin: {
+        description: 'Links shown in the header and footer. Reorder, add, or remove as needed.',
+      },
+      defaultValue: [
+        { label: 'Home', href: '/' },
+        { label: 'Menu', href: '/menu' },
+        { label: 'Gallery', href: '/gallery' },
+        { label: 'Events', href: '/events' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+      ],
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Label',
+              required: true,
+              admin: { width: '50%' },
+            },
+            {
+              name: 'href',
+              type: 'text',
+              label: 'Path or URL',
+              required: true,
+              admin: { width: '50%', placeholder: '/menu or https://...' },
+            },
+          ],
+        },
+      ],
+    },
     // ── Contact ───────────────────────────────────────────────────────────────
     {
       name: 'contact',

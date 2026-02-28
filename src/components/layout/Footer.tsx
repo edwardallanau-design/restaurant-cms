@@ -5,7 +5,7 @@ import { Container } from '@/components/ui/Container'
 interface FooterProps {
   settings: Pick<
     SiteSettings,
-    'restaurantName' | 'contact' | 'hours' | 'socialLinks'
+    'restaurantName' | 'contact' | 'hours' | 'socialLinks' | 'navigation'
   >
 }
 
@@ -104,16 +104,9 @@ export function Footer({ settings }: FooterProps) {
               Quick Links
             </h4>
             <ul className="space-y-2 text-sm">
-              {[
-                ['/', 'Home'],
-                ['/menu', 'Menu'],
-                ['/gallery', 'Gallery'],
-                ['/events', 'Events'],
-                ['/about', 'About Us'],
-                ['/contact', 'Contact'],
-              ].map(([href, label]) => (
+              {(settings.navigation ?? []).map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href ?? '/'} className="text-white/70 hover:text-primary-300 transition-colors">
+                  <Link href={href} className="text-white/70 hover:text-primary-300 transition-colors">
                     {label}
                   </Link>
                 </li>

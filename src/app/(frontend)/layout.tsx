@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -13,12 +14,30 @@ const getSiteSettings = unstable_cache(
   { tags: [CACHE_TAGS.settings], revalidate: false },
 )
 
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings()
+  const name = settings.restaurantName ?? 'Restaurant'
+  return {
+    title: {
+      default: settings.seo?.metaTitle ?? name,
+      template: `%s | ${name}`,
+    },
+    description: settings.seo?.metaDescription ?? undefined,
+  }
+}
+
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings()
 
   return (
     <>
-      <Header settings={{ restaurantName: settings.restaurantName, logo: settings.logo }} />
+      <Header
+        settings={{
+          restaurantName: settings.restaurantName,
+          logo: settings.logo,
+          navigation: settings.navigation,
+        }}
+      />
       <main>{children}</main>
       <Footer
         settings={{
@@ -26,6 +45,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
           contact: settings.contact,
           hours: settings.hours,
           socialLinks: settings.socialLinks,
+          navigation: settings.navigation,
         }}
       />
     </>

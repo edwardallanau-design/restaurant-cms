@@ -15,11 +15,6 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Restaurant',
-    template: '%s | Restaurant',
-  },
-  description: 'Welcome to our restaurant.',
   metadataBase: new URL(process.env['NEXT_PUBLIC_SERVER_URL'] ?? 'http://localhost:3000'),
 }
 
