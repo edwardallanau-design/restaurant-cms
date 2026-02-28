@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Fonts ─────────────────────────────────────────────────────────────── */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  /* ── Brand Colors ──────────────────────────────────────────────────────── */
+  /* Warm amber/gold — replace with your restaurant's brand color */
+  --color-primary-50: oklch(97% 0.02 80);
+  --color-primary-100: oklch(93% 0.05 80);
+  --color-primary-200: oklch(87% 0.09 75);
+  --color-primary-300: oklch(79% 0.13 72);
+  --color-primary-400: oklch(70% 0.16 68);
+  --color-primary-500: oklch(60% 0.18 65);
+  --color-primary-600: oklch(52% 0.18 62);
+  --color-primary-700: oklch(44% 0.16 60);
+  --color-primary-800: oklch(36% 0.13 58);
+  --color-primary-900: oklch(28% 0.09 55);
+  --color-primary-950: oklch(18% 0.06 52);
+
+  /* Neutral warm surface */
+  --color-surface: oklch(98% 0.005 80);
+  --color-surface-dark: oklch(12% 0.005 80);
+
+  /* Muted text */
+  --color-muted: oklch(55% 0.01 80);
+  --color-muted-dark: oklch(65% 0.01 80);
+
+  /* ── Border Radius ─────────────────────────────────────────────────────── */
+  --radius-card: 0.75rem;
+  --radius-button: 0.375rem;
+
+  /* ── Spacing ───────────────────────────────────────────────────────────── */
+  --spacing-section: 5rem; /* 80px — consistent vertical section padding */
+
+  /* ── Transitions ───────────────────────────────────────────────────────── */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ── Base Styles ──────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: oklch(15% 0.01 80);
+  }
+
+  /* Focus ring consistent with brand */
+  :focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 2px;
+  }
+
+  /* Smooth image rendering */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ── Utility Classes ──────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Section vertical padding */
+  .section-padding {
+    padding-block: var(--spacing-section);
+  }
+
+  /* Visually hidden but accessible to screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
