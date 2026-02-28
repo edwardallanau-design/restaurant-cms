@@ -26,8 +26,6 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname, 'app/(payload)/admin'),
     },
-    // Redirect to admin on first load
-    components: {},
   },
 
   // ── Collections & Globals ───────────────────────────────────────────────────

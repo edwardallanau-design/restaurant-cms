@@ -3,9 +3,6 @@ import { withPayload } from '@payloadcms/next/withPayload'
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
-  experimental: {
-    reactCompiler: false,
-  },
   images: {
     remotePatterns: [
       // Vercel Blob storage

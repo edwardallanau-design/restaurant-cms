@@ -19,7 +19,6 @@ dist/
 # Payload generated files (regenerated on build)
 src/payload-types.ts
 src/generated-schema.graphql
-src/app/(payload)/admin/importMap.js
 
 # Claude Code session data
 .claude/
