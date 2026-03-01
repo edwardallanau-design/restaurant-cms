@@ -28,10 +28,14 @@ const serverUrl =
       ? `https://${process.env['VERCEL_URL']}`
       : 'http://localhost:3000')
 
-// Include both the production URL and the per-deployment URL so that preview
-// deployments and the production admin can both upload without CSRF errors.
+// Always include the Vercel system URLs unconditionally so that even if
+// NEXT_PUBLIC_SERVER_URL is set to localhost (common during local dev), the
+// actual production and preview origins are never accidentally excluded.
 const allowedOrigins = [
   serverUrl,
+  process.env['VERCEL_PROJECT_PRODUCTION_URL']
+    ? `https://${process.env['VERCEL_PROJECT_PRODUCTION_URL']}`
+    : null,
   process.env['VERCEL_URL'] ? `https://${process.env['VERCEL_URL']}` : null,
   'http://localhost:3000',
 ].filter((v): v is string => Boolean(v))
