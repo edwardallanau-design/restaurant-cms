@@ -35,7 +35,7 @@ const getHomeData = unstable_cache(
   ['home-page'],
   {
     tags: [CACHE_TAGS.hero, CACHE_TAGS.settings, CACHE_TAGS.menu, CACHE_TAGS.gallery],
-    revalidate: false,
+    revalidate: 300,
   },
 )
 

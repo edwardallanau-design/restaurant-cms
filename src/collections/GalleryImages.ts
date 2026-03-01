@@ -54,14 +54,14 @@ export const GalleryImages: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.gallery)
-        safeRevalidateTag(CACHE_TAGS.media)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.gallery)
+        await safeRevalidateTag(CACHE_TAGS.media)
       },
     ],
     afterDelete: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.gallery)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.gallery)
       },
     ],
   },

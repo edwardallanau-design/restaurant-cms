@@ -17,7 +17,7 @@ const getContactData = unstable_cache(
     return payload.findGlobal({ slug: 'site-settings', depth: 0 })
   },
   ['contact-page'],
-  { tags: [CACHE_TAGS.settings], revalidate: false },
+  { tags: [CACHE_TAGS.settings], revalidate: 300 },
 )
 
 export default async function ContactPage() {

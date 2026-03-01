@@ -31,7 +31,7 @@ const getEvents = unstable_cache(
     return result.docs
   },
   ['events-page'],
-  { tags: [CACHE_TAGS.events], revalidate: false },
+  { tags: [CACHE_TAGS.events], revalidate: 300 },
 )
 
 export default async function EventsPage() {

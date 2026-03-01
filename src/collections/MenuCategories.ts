@@ -67,13 +67,13 @@ export const MenuCategories: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.menu)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.menu)
       },
     ],
     afterDelete: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.menu)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.menu)
       },
     ],
   },

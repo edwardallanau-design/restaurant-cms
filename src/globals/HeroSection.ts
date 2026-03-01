@@ -120,8 +120,8 @@ export const HeroSection: GlobalConfig = {
   ],
   hooks: {
     afterChange: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.hero)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.hero)
       },
     ],
   },

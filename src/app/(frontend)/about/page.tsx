@@ -29,7 +29,7 @@ const getAboutData = unstable_cache(
     return { settings, galleryImages: gallery.docs }
   },
   ['about-page'],
-  { tags: [CACHE_TAGS.settings, CACHE_TAGS.gallery], revalidate: false },
+  { tags: [CACHE_TAGS.settings, CACHE_TAGS.gallery], revalidate: 300 },
 )
 
 export default async function AboutPage() {

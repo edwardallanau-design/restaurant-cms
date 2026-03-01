@@ -105,13 +105,13 @@ export const Events: CollectionConfig = {
   ],
   hooks: {
     afterChange: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.events)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.events)
       },
     ],
     afterDelete: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.events)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.events)
       },
     ],
   },

@@ -34,7 +34,7 @@ const getMenuData = unstable_cache(
     return { categories: categories.docs, items: items.docs }
   },
   ['menu-page'],
-  { tags: [CACHE_TAGS.menu], revalidate: false },
+  { tags: [CACHE_TAGS.menu], revalidate: 300 },
 )
 
 const DIETARY_COLORS: Record<string, string> = {

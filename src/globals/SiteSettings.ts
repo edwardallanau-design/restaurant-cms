@@ -263,8 +263,8 @@ export const SiteSettings: GlobalConfig = {
   ],
   hooks: {
     afterChange: [
-      () => {
-        safeRevalidateTag(CACHE_TAGS.settings)
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.settings)
       },
     ],
   },

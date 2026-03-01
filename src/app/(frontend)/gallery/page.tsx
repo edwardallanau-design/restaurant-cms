@@ -23,7 +23,7 @@ const getGalleryImages = unstable_cache(
     return result.docs
   },
   ['gallery-page'],
-  { tags: [CACHE_TAGS.gallery], revalidate: false },
+  { tags: [CACHE_TAGS.gallery], revalidate: 300 },
 )
 
 export default async function GalleryPage() {
