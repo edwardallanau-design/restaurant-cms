@@ -384,4 +384,48 @@ VALUES
    '2026-05-02 19:00:00', NULL, false, 'draft', NOW(), NOW());
 
 
+-- ── 5. Page Content (About page) ─────────────────────────────
+--
+-- Global slug: page-content → table: page_content
+-- Nested group fields are flattened with underscores:
+--   about.eyebrow        → about_eyebrow
+--   about.valuesHeading  → about_values_heading
+-- Rich text is stored as JSONB (same Lexical format as elsewhere).
+-- The values array lives in a separate table: page_content_about_values
+--
+-- Run this AFTER `npm run dev` has created the tables via Payload migrations.
+
+INSERT INTO page_content (
+  about_eyebrow,
+  about_story,
+  about_values_heading,
+  about_cta_heading,
+  about_cta_subtext,
+  about_cta_primary_text,
+  about_cta_secondary_text,
+  updated_at,
+  created_at
+)
+VALUES (
+  'Who We Are',
+
+  -- Story: two plain paragraphs of introduction text
+  '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Welcome to Gotomami. We believe in crafting every dish with care, using the finest seasonal ingredients to create an experience you''ll want to return to. Our passion for food is matched only by our commitment to making every guest feel at home.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Whether you''re joining us for a quiet dinner, a family celebration, or a special occasion, our team is dedicated to making it unforgettable.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+
+  'Our Values',
+  'Come Visit Us',
+  'We''d love to welcome you. View our menu or get in touch to plan your visit.',
+  'View Our Menu',
+  'Contact Us',
+  NOW(),
+  NOW()
+);
+
+INSERT INTO page_content_about_values ("order", parent_id, icon, title, description)
+VALUES
+  (1, (SELECT id FROM page_content LIMIT 1), '🌿',  'Fresh & Seasonal',  'We source the finest local and seasonal ingredients to keep every dish vibrant and full of flavour.'),
+  (2, (SELECT id FROM page_content LIMIT 1), '👨‍🍳', 'Crafted with Care', 'Every plate is prepared by our dedicated kitchen team with time-honoured techniques and modern creativity.'),
+  (3, (SELECT id FROM page_content LIMIT 1), '🤝',  'Warm Hospitality',  'From the moment you walk in, we treat every guest like family. Your experience is our priority.');
+
+
 COMMIT;

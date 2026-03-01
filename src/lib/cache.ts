@@ -9,6 +9,7 @@ export const CACHE_TAGS = {
   settings: 'site-settings',
   hero: 'hero',
   media: 'media',
+  content: 'page-content',
 } as const
 
 export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS]

@@ -11,6 +11,7 @@ import { MenuCategories } from './collections/MenuCategories.ts'
 import { MenuItems } from './collections/MenuItems.ts'
 import { Users } from './collections/Users.ts'
 import { HeroSection } from './globals/HeroSection.ts'
+import { PageContent } from './globals/PageContent.ts'
 import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -30,7 +31,7 @@ export default buildConfig({
 
   // ── Collections & Globals ───────────────────────────────────────────────────
   collections: [Users, Media, MenuCategories, MenuItems, GalleryImages, Events],
-  globals: [SiteSettings, HeroSection],
+  globals: [SiteSettings, HeroSection, PageContent],
 
   // ── Editor ──────────────────────────────────────────────────────────────────
   editor: lexicalEditor({
