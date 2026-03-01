@@ -388,8 +388,13 @@ VALUES
 --
 -- Global slug: page-content → table: page_content
 -- Nested group fields are flattened with underscores:
---   about.eyebrow        → about_eyebrow
---   about.valuesHeading  → about_values_heading
+--   about.eyebrow                      → about_eyebrow
+--   about.headerTitle                  → about_header_title
+--   about.tagline                      → about_tagline
+--   about.valuesHeading                → about_values_heading
+--   about.storyFormatting.background   → about_story_formatting_background
+--   about.storyFormatting.textAlign    → about_story_formatting_text_align
+--   about.storyFormatting.containerWidth → about_story_formatting_container_width
 -- Rich text is stored as JSONB (same Lexical format as elsewhere).
 -- The values array lives in a separate table: page_content_about_values
 --
@@ -397,7 +402,12 @@ VALUES
 
 INSERT INTO page_content (
   about_eyebrow,
+  about_header_title,
+  about_tagline,
   about_story,
+  about_story_formatting_background,
+  about_story_formatting_text_align,
+  about_story_formatting_container_width,
   about_values_heading,
   about_cta_heading,
   about_cta_subtext,
@@ -408,10 +418,15 @@ INSERT INTO page_content (
 )
 VALUES (
   'Who We Are',
+  'About Us',
+  'Where every meal tells a story.',
 
   -- Story: two plain paragraphs of introduction text
   '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Welcome to Gotomami. We believe in crafting every dish with care, using the finest seasonal ingredients to create an experience you''ll want to return to. Our passion for food is matched only by our commitment to making every guest feel at home.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Whether you''re joining us for a quiet dinner, a family celebration, or a special occasion, our team is dedicated to making it unforgettable.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
 
+  'white',
+  'center',
+  'narrow',
   'Our Values',
   'Come Visit Us',
   'We''d love to welcome you. View our menu or get in touch to plan your visit.',
