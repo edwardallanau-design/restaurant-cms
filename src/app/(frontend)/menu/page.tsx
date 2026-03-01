@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 const getMenuData = unstable_cache(
   async () => {
     const payload = await getPayload()
-    const [categories, items] = await Promise.all([
+    const [categories, items, content] = await Promise.all([
       payload.find({
         collection: 'menu-categories',
         sort: 'order',
@@ -30,11 +30,12 @@ const getMenuData = unstable_cache(
         limit: 300,
         depth: 1,
       }),
+      payload.findGlobal({ slug: 'page-content', depth: 0 }),
     ])
-    return { categories: categories.docs, items: items.docs }
+    return { categories: categories.docs, items: items.docs, content }
   },
   ['menu-page'],
-  { tags: [CACHE_TAGS.menu], revalidate: 300 },
+  { tags: [CACHE_TAGS.menu, CACHE_TAGS.content], revalidate: 300 },
 )
 
 const DIETARY_COLORS: Record<string, string> = {
@@ -50,7 +51,7 @@ const DIETARY_COLORS: Record<string, string> = {
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function MenuPage() {
-  const { categories, items } = await getMenuData()
+  const { categories, items, content } = await getMenuData()
 
   // Group items by category id
   const itemsByCategory = new Map<string, MenuItem[]>()
@@ -75,9 +76,11 @@ export default async function MenuPage() {
       <div className="bg-primary-900 pb-16 pt-32 text-center text-white">
         <Container>
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-300">
-            What We Offer
+            {content.menu?.eyebrow ?? 'What We Offer'}
           </p>
-          <h1 className="font-serif text-4xl font-bold sm:text-5xl">Our Menu</h1>
+          <h1 className="font-serif text-4xl font-bold sm:text-5xl">
+            {content.menu?.headerTitle ?? 'Our Menu'}
+          </h1>
         </Container>
       </div>
 

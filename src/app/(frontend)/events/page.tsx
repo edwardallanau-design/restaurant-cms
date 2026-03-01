@@ -11,31 +11,34 @@ export const metadata: Metadata = {
   description: 'Stay up to date with our latest events, promotions, and special occasions.',
 }
 
-const getEvents = unstable_cache(
+const getEventsData = unstable_cache(
   async () => {
     const payload = await getPayload()
     const now = new Date().toISOString()
     // Upcoming + published, featured first
-    const result = await payload.find({
-      collection: 'events',
-      where: {
-        and: [
-          { status: { equals: 'published' } },
-          { date: { greater_than_equal: now } },
-        ],
-      },
-      sort: ['-featured', 'date'],
-      limit: 50,
-      depth: 1,
-    })
-    return result.docs
+    const [result, content] = await Promise.all([
+      payload.find({
+        collection: 'events',
+        where: {
+          and: [
+            { status: { equals: 'published' } },
+            { date: { greater_than_equal: now } },
+          ],
+        },
+        sort: ['-featured', 'date'],
+        limit: 50,
+        depth: 1,
+      }),
+      payload.findGlobal({ slug: 'page-content', depth: 0 }),
+    ])
+    return { events: result.docs, content }
   },
   ['events-page'],
-  { tags: [CACHE_TAGS.events], revalidate: 300 },
+  { tags: [CACHE_TAGS.events, CACHE_TAGS.content], revalidate: 300 },
 )
 
 export default async function EventsPage() {
-  const events = await getEvents()
+  const { events, content } = await getEventsData()
 
   const featured = events.filter((e) => e.featured)
   const regular = events.filter((e) => !e.featured)
@@ -45,9 +48,11 @@ export default async function EventsPage() {
       <div className="bg-primary-900 pb-16 pt-32 text-center text-white">
         <Container>
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-300">
-            What&apos;s Coming Up
+            {content.events?.eyebrow ?? "What's Coming Up"}
           </p>
-          <h1 className="font-serif text-4xl font-bold sm:text-5xl">Events & Specials</h1>
+          <h1 className="font-serif text-4xl font-bold sm:text-5xl">
+            {content.events?.headerTitle ?? 'Events & Specials'}
+          </h1>
         </Container>
       </div>
 

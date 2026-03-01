@@ -14,14 +14,18 @@ export const metadata: Metadata = {
 const getContactData = unstable_cache(
   async () => {
     const payload = await getPayload()
-    return payload.findGlobal({ slug: 'site-settings', depth: 0 })
+    const [settings, content] = await Promise.all([
+      payload.findGlobal({ slug: 'site-settings', depth: 0 }),
+      payload.findGlobal({ slug: 'page-content', depth: 0 }),
+    ])
+    return { settings, content }
   },
   ['contact-page'],
-  { tags: [CACHE_TAGS.settings], revalidate: 300 },
+  { tags: [CACHE_TAGS.settings, CACHE_TAGS.content], revalidate: 300 },
 )
 
 export default async function ContactPage() {
-  const settings = await getContactData()
+  const { settings, content } = await getContactData()
   const { contact, hours, restaurantName } = settings
 
   return (
@@ -30,9 +34,11 @@ export default async function ContactPage() {
       <div className="bg-primary-900 pb-20 pt-32 text-center text-white">
         <Container>
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-300">
-            Find Us
+            {content.contact?.eyebrow ?? 'Find Us'}
           </p>
-          <h1 className="font-serif text-4xl font-bold sm:text-5xl">Contact & Location</h1>
+          <h1 className="font-serif text-4xl font-bold sm:text-5xl">
+            {content.contact?.headerTitle ?? 'Contact & Location'}
+          </h1>
         </Container>
       </div>
 

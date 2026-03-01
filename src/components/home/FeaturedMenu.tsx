@@ -6,6 +6,8 @@ import { ButtonLink } from '@/components/custom/Button'
 
 interface FeaturedMenuProps {
   items: MenuItem[]
+  eyebrow?: string
+  heading?: string
 }
 
 const DIETARY_LABELS: Record<string, string> = {
@@ -18,7 +20,7 @@ const DIETARY_LABELS: Record<string, string> = {
   'chefs-special': '★',
 }
 
-export function FeaturedMenu({ items }: FeaturedMenuProps) {
+export function FeaturedMenu({ items, eyebrow = 'Our Selection', heading = 'Featured Dishes' }: FeaturedMenuProps) {
   if (!items.length) return null
 
   return (
@@ -27,10 +29,10 @@ export function FeaturedMenu({ items }: FeaturedMenuProps) {
         {/* Header */}
         <div className="mb-12 text-center">
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-500">
-            Our Selection
+            {eyebrow}
           </p>
           <h2 className="font-serif text-3xl font-bold text-gray-900 sm:text-4xl">
-            Featured Dishes
+            {heading}
           </h2>
         </div>
 
