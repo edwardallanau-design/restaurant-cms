@@ -436,11 +436,10 @@ VALUES (
   NOW()
 );
 
-INSERT INTO page_content_about_values ("order", parent_id, icon, title, description)
+INSERT INTO page_content_about_values (_order, _parent_id, id, icon, title, description)
 VALUES
-  (1, (SELECT id FROM page_content LIMIT 1), '🌿',  'Fresh & Seasonal',  'We source the finest local and seasonal ingredients to keep every dish vibrant and full of flavour.'),
-  (2, (SELECT id FROM page_content LIMIT 1), '👨‍🍳', 'Crafted with Care', 'Every plate is prepared by our dedicated kitchen team with time-honoured techniques and modern creativity.'),
-  (3, (SELECT id FROM page_content LIMIT 1), '🤝',  'Warm Hospitality',  'From the moment you walk in, we treat every guest like family. Your experience is our priority.');
-
+  (1, (SELECT id FROM page_content LIMIT 1), '69a3a3e1673863b1a4df19fa', '🌿', 'Fresh & Seasonal', 'We source the finest local and seasonal ingredients to keep every dish vibrant and full of flavour.'),
+  (2, (SELECT id FROM page_content LIMIT 1), '69a3a3e1673863b1a4df19fb', '👨‍🍳', 'Crafted with Care', 'Every plate is prepared by our dedicated kitchen team with time-honoured techniques and modern creativity.'),
+  (3, (SELECT id FROM page_content LIMIT 1), '69a3a3e1673863b1a4df19fc', '🤝', 'Warm Hospitality', 'From the moment you walk in, we treat every guest like family. Your experience is our priority.')
 
 COMMIT;
