@@ -35,14 +35,18 @@ function RichTextNode({ node }: { node: SerializedLexicalNode }) {
   }
 
   switch (n.type) {
-    case 'paragraph':
+    case 'paragraph': {
+      const isEmpty = !n.children?.length || n.children.every(
+        (c) => (c as { type: string; text?: string }).type === 'text' && !(c as { text?: string }).text,
+      )
       return (
         <p>
-          {n.children?.map((child, i) => (
-            <RichTextNode key={i} node={child} />
-          ))}
+          {isEmpty
+            ? <br />
+            : n.children?.map((child, i) => <RichTextNode key={i} node={child} />)}
         </p>
       )
+    }
 
     case 'heading': {
       const Tag = (n.tag ?? 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
