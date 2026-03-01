@@ -52,8 +52,10 @@ export const env = createEnv({
   client: {
     /**
      * The canonical URL of the deployed site (used for OG images and Payload admin CORS).
+     * Optional — on Vercel the URL is auto-detected from VERCEL_PROJECT_PRODUCTION_URL.
+     * Set this explicitly if you use a custom domain or non-Vercel hosting.
      */
-    NEXT_PUBLIC_SERVER_URL: z.string().url(),
+    NEXT_PUBLIC_SERVER_URL: z.string().url().optional(),
   },
 
   /**
