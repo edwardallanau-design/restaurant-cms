@@ -7,13 +7,148 @@ export const PageContent: GlobalConfig = {
   label: 'Page Content',
   admin: {
     group: 'Settings',
-    description: 'Editable static text for pages. Start with the About page.',
+    description: 'Editable static text for page headers and sections.',
   },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
   },
   fields: [
+    // ── Home Page ─────────────────────────────────────────────────────────────
+    {
+      name: 'home',
+      type: 'group',
+      label: 'Home Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'eyebrow',
+              type: 'text',
+              label: 'Featured Section Eyebrow',
+              defaultValue: 'Our Selection',
+              admin: { width: '50%', description: 'Small label shown above the Featured Dishes heading.' },
+            },
+            {
+              name: 'headerTitle',
+              type: 'text',
+              label: 'Featured Section Heading',
+              defaultValue: 'Featured Dishes',
+              admin: { width: '50%', description: 'Main heading of the featured menu section.' },
+            },
+          ],
+        },
+      ],
+    },
+    // ── Menu Page ─────────────────────────────────────────────────────────────
+    {
+      name: 'menu',
+      type: 'group',
+      label: 'Menu Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'eyebrow',
+              type: 'text',
+              label: 'Eyebrow Text',
+              defaultValue: 'What We Offer',
+              admin: { width: '50%', description: 'Small label shown above the page title.' },
+            },
+            {
+              name: 'headerTitle',
+              type: 'text',
+              label: 'Page Title',
+              defaultValue: 'Our Menu',
+              admin: { width: '50%', description: 'Main heading shown in the page header.' },
+            },
+          ],
+        },
+      ],
+    },
+    // ── Gallery Page ──────────────────────────────────────────────────────────
+    {
+      name: 'gallery',
+      type: 'group',
+      label: 'Gallery Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'eyebrow',
+              type: 'text',
+              label: 'Eyebrow Text',
+              defaultValue: 'A Visual Story',
+              admin: { width: '50%', description: 'Small label shown above the page title.' },
+            },
+            {
+              name: 'headerTitle',
+              type: 'text',
+              label: 'Page Title',
+              defaultValue: 'Gallery',
+              admin: { width: '50%', description: 'Main heading shown in the page header.' },
+            },
+          ],
+        },
+      ],
+    },
+    // ── Events Page ───────────────────────────────────────────────────────────
+    {
+      name: 'events',
+      type: 'group',
+      label: 'Events Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'eyebrow',
+              type: 'text',
+              label: 'Eyebrow Text',
+              defaultValue: "What's Coming Up",
+              admin: { width: '50%', description: 'Small label shown above the page title.' },
+            },
+            {
+              name: 'headerTitle',
+              type: 'text',
+              label: 'Page Title',
+              defaultValue: 'Events & Specials',
+              admin: { width: '50%', description: 'Main heading shown in the page header.' },
+            },
+          ],
+        },
+      ],
+    },
+    // ── Contact Page ──────────────────────────────────────────────────────────
+    {
+      name: 'contact',
+      type: 'group',
+      label: 'Contact Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'eyebrow',
+              type: 'text',
+              label: 'Eyebrow Text',
+              defaultValue: 'Find Us',
+              admin: { width: '50%', description: 'Small label shown above the page title.' },
+            },
+            {
+              name: 'headerTitle',
+              type: 'text',
+              label: 'Page Title',
+              defaultValue: 'Contact & Location',
+              admin: { width: '50%', description: 'Main heading shown in the page header.' },
+            },
+          ],
+        },
+      ],
+    },
     // ── About Page ────────────────────────────────────────────────────────────
     {
       name: 'about',

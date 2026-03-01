@@ -12,9 +12,10 @@ import type { Media } from '@/payload-types'
 const getHomeData = unstable_cache(
   async () => {
     const payload = await getPayload()
-    const [hero, settings, featuredItems, featuredGallery] = await Promise.all([
+    const [hero, settings, content, featuredItems, featuredGallery] = await Promise.all([
       payload.findGlobal({ slug: 'hero-section', depth: 1 }),
       payload.findGlobal({ slug: 'site-settings', depth: 1 }),
+      payload.findGlobal({ slug: 'page-content', depth: 0 }),
       payload.find({
         collection: 'menu-items',
         where: { and: [{ featured: { equals: true } }, { available: { equals: true } }] },
@@ -30,11 +31,11 @@ const getHomeData = unstable_cache(
         depth: 1,
       }),
     ])
-    return { hero, settings, featuredItems: featuredItems.docs, featuredGallery: featuredGallery.docs }
+    return { hero, settings, content, featuredItems: featuredItems.docs, featuredGallery: featuredGallery.docs }
   },
   ['home-page'],
   {
-    tags: [CACHE_TAGS.hero, CACHE_TAGS.settings, CACHE_TAGS.menu, CACHE_TAGS.gallery],
+    tags: [CACHE_TAGS.hero, CACHE_TAGS.settings, CACHE_TAGS.content, CACHE_TAGS.menu, CACHE_TAGS.gallery],
     revalidate: 300,
   },
 )
@@ -61,7 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  const { hero, featuredItems, featuredGallery } = await getHomeData()
+  const { hero, content, featuredItems, featuredGallery } = await getHomeData()
 
   return (
     <>
@@ -74,7 +75,11 @@ export default async function HomePage() {
         secondaryCta={hero.secondaryCta}
         overlay={hero.overlay}
       />
-      <FeaturedMenu items={featuredItems} />
+      <FeaturedMenu
+        items={featuredItems}
+        eyebrow={content.home?.eyebrow ?? undefined}
+        heading={content.home?.headerTitle ?? undefined}
+      />
       <GalleryPreview images={featuredGallery} />
     </>
   )
