@@ -43,7 +43,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
               <div className="relative overflow-hidden rounded-card bg-gray-100">
                 {image?.url ? (
                   <Image
-                    src={image.url}
+                    src={image.sizes?.card?.url ?? image.url}
                     alt={image.alt ?? galleryItem.caption ?? `Gallery photo ${idx + 1}`}
                     width={600}
                     height={400}

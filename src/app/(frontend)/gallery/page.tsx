@@ -26,7 +26,7 @@ const getGalleryData = unstable_cache(
     return { images: result.docs, content }
   },
   ['gallery-page'],
-  { tags: [CACHE_TAGS.gallery, CACHE_TAGS.content], revalidate: 300 },
+  { tags: [CACHE_TAGS.gallery, CACHE_TAGS.content, CACHE_TAGS.media], revalidate: 300 },
 )
 
 export default async function GalleryPage() {

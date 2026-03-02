@@ -35,7 +35,7 @@ const getHomeData = unstable_cache(
   },
   ['home-page'],
   {
-    tags: [CACHE_TAGS.hero, CACHE_TAGS.settings, CACHE_TAGS.content, CACHE_TAGS.menu, CACHE_TAGS.gallery],
+    tags: [CACHE_TAGS.hero, CACHE_TAGS.settings, CACHE_TAGS.content, CACHE_TAGS.menu, CACHE_TAGS.gallery, CACHE_TAGS.media],
     revalidate: 300,
   },
 )

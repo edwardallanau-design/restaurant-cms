@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns,
     formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2592000, // 30 days — restaurant images rarely change
   },
   // Payload requires this to work with Next.js
   outputFileTracingIncludes: {

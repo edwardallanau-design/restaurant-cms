@@ -40,11 +40,11 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
               >
                 {image?.url ? (
                   <Image
-                    src={image.url}
+                    src={image.sizes?.card?.url ?? image.url}
                     alt={image.alt ?? galleryItem.caption ?? 'Gallery image'}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-105"
-                    sizes="(min-width: 768px) 33vw, 50vw"
+                    sizes={isLarge ? '(min-width: 640px) 66vw, 100vw' : '(min-width: 640px) 33vw, 50vw'}
                   />
                 ) : (
                   <div className="h-full bg-primary-50" />
