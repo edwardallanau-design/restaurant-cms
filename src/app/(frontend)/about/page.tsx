@@ -47,7 +47,11 @@ export default async function AboutPage() {
   const { galleryImages, content } = await getAboutData()
   const about = content.about
 
-  type StoryFmt = { background?: string | null; textAlign?: string | null; containerWidth?: string | null }
+  type StoryFmt = {
+    background?: string | null
+    textAlign?: string | null
+    containerWidth?: string | null
+  }
   const fmt = (about as typeof about & { storyFormatting?: StoryFmt })?.storyFormatting
   const storyBg = STORY_BG[fmt?.background ?? 'white'] ?? 'bg-white'
   const storyAlign = STORY_ALIGN[fmt?.textAlign ?? 'center'] ?? 'text-center'
@@ -90,13 +94,16 @@ export default async function AboutPage() {
 
       {/* Gallery strip */}
       {galleryImages.length > 0 && (
-        <Section padding="sm" className="bg-surface overflow-hidden">
+        <Section padding="sm" className="overflow-hidden bg-surface">
           <Container>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
               {galleryImages.map((item) => {
                 const img = typeof item.image === 'object' ? (item.image as Media) : null
                 return (
-                  <div key={item.id} className="relative aspect-square overflow-hidden rounded-card">
+                  <div
+                    key={item.id}
+                    className="relative aspect-square overflow-hidden rounded-card"
+                  >
                     {img?.url ? (
                       <Image
                         src={img.url}

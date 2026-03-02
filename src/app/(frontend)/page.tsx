@@ -31,11 +31,24 @@ const getHomeData = unstable_cache(
         depth: 1,
       }),
     ])
-    return { hero, settings, content, featuredItems: featuredItems.docs, featuredGallery: featuredGallery.docs }
+    return {
+      hero,
+      settings,
+      content,
+      featuredItems: featuredItems.docs,
+      featuredGallery: featuredGallery.docs,
+    }
   },
   ['home-page'],
   {
-    tags: [CACHE_TAGS.hero, CACHE_TAGS.settings, CACHE_TAGS.content, CACHE_TAGS.menu, CACHE_TAGS.gallery, CACHE_TAGS.media],
+    tags: [
+      CACHE_TAGS.hero,
+      CACHE_TAGS.settings,
+      CACHE_TAGS.content,
+      CACHE_TAGS.menu,
+      CACHE_TAGS.gallery,
+      CACHE_TAGS.media,
+    ],
     revalidate: 300,
   },
 )
@@ -44,9 +57,7 @@ const getHomeData = unstable_cache(
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings } = await getHomeData()
-  const ogImage = typeof settings.seo?.ogImage === 'object'
-    ? (settings.seo.ogImage as Media)
-    : null
+  const ogImage = typeof settings.seo?.ogImage === 'object' ? (settings.seo.ogImage as Media) : null
 
   return {
     title: settings.seo?.metaTitle ?? settings.restaurantName ?? 'Restaurant',

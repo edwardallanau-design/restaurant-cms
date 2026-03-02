@@ -18,7 +18,9 @@ export interface ContactEmailPayload {
 /**
  * Sends a contact form submission to the restaurant owner via Resend.
  */
-export async function sendContactEmail(data: ContactEmailPayload): Promise<{ success: boolean; error?: string }> {
+export async function sendContactEmail(
+  data: ContactEmailPayload,
+): Promise<{ success: boolean; error?: string }> {
   try {
     const { error } = await resend.emails.send({
       from: env.RESEND_FROM_EMAIL,
@@ -57,11 +59,15 @@ function buildContactEmailHtml(data: ContactEmailPayload): string {
             <td style="padding: 8px 0; font-weight: 600; color: #555;">Email</td>
             <td style="padding: 8px 0;"><a href="mailto:${escapeHtml(data.email)}" style="color: #2563eb;">${escapeHtml(data.email)}</a></td>
           </tr>
-          ${data.phone ? `
+          ${
+            data.phone
+              ? `
           <tr>
             <td style="padding: 8px 0; font-weight: 600; color: #555;">Phone</td>
             <td style="padding: 8px 0; color: #111;">${escapeHtml(data.phone)}</td>
-          </tr>` : ''}
+          </tr>`
+              : ''
+          }
         </table>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <h2 style="font-size: 16px; color: #555; margin-bottom: 12px;">Message</h2>

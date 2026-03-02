@@ -66,7 +66,10 @@ export default buildConfig({
     pool: {
       // Normalize sslmode=require → verify-full to silence the pg-connection-string
       // deprecation warning. Both modes behave identically against Neon (CA-signed certs).
-      connectionString: (process.env['DATABASE_URL'] ?? '').replace('sslmode=require', 'sslmode=verify-full'),
+      connectionString: (process.env['DATABASE_URL'] ?? '').replace(
+        'sslmode=require',
+        'sslmode=verify-full',
+      ),
       // Neon's serverless driver handles connection pooling on its side.
       // Keep pool size small for Vercel serverless functions.
       max: 10,

@@ -77,23 +77,31 @@ export function GalleryGrid({ images }: GalleryGridProps) {
           {/* Previous */}
           <button
             className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/25"
-            onClick={(e) => { e.stopPropagation(); prev() }}
+            onClick={(e) => {
+              e.stopPropagation()
+              prev()
+            }}
             aria-label="Previous image"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-6 w-6"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
           </button>
 
           {/* Image */}
-          <div
-            className="relative max-h-[85vh] max-w-5xl"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="relative max-h-[85vh] max-w-5xl" onClick={(e) => e.stopPropagation()}>
             {(() => {
               const galleryItem = images[lightbox]
               if (!galleryItem) return null
-              const image = typeof galleryItem.image === 'object' ? (galleryItem.image as Media) : null
+              const image =
+                typeof galleryItem.image === 'object' ? (galleryItem.image as Media) : null
               return image?.url ? (
                 <>
                   <Image
@@ -115,10 +123,20 @@ export function GalleryGrid({ images }: GalleryGridProps) {
           {/* Next */}
           <button
             className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/25"
-            onClick={(e) => { e.stopPropagation(); next() }}
+            onClick={(e) => {
+              e.stopPropagation()
+              next()
+            }}
             aria-label="Next image"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-6 w-6"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
           </button>
@@ -129,7 +147,14 @@ export function GalleryGrid({ images }: GalleryGridProps) {
             onClick={closeLightbox}
             aria-label="Close lightbox"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-5 w-5"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
           </button>

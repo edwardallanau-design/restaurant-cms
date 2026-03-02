@@ -5,7 +5,13 @@ import { Container } from '@/components/custom/Container'
 
 type HeroSectionProps = Pick<
   HeroSectionType,
-  'heading' | 'subheading' | 'backgroundImage' | 'backgroundVideo' | 'primaryCta' | 'secondaryCta' | 'overlay'
+  | 'heading'
+  | 'subheading'
+  | 'backgroundImage'
+  | 'backgroundVideo'
+  | 'primaryCta'
+  | 'secondaryCta'
+  | 'overlay'
 >
 
 export function HeroSection({
@@ -81,7 +87,12 @@ export function HeroSection({
                 </ButtonLink>
               )}
               {secondaryCta?.text && secondaryCta.link && (
-                <ButtonLink href={secondaryCta.link} variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+                <ButtonLink
+                  href={secondaryCta.link}
+                  variant="outline"
+                  size="lg"
+                  className="border-white text-white hover:bg-white/10"
+                >
                   {secondaryCta.text}
                 </ButtonLink>
               )}
@@ -92,7 +103,14 @@ export function HeroSection({
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-white/60">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="h-6 w-6"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
         </svg>
       </div>

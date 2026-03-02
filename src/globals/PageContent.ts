@@ -28,7 +28,10 @@ export const PageContent: GlobalConfig = {
               type: 'text',
               label: 'Featured Section Eyebrow',
               defaultValue: 'Our Selection',
-              admin: { width: '50%', description: 'Small label shown above the Featured Dishes heading.' },
+              admin: {
+                width: '50%',
+                description: 'Small label shown above the Featured Dishes heading.',
+              },
             },
             {
               name: 'headerTitle',
@@ -249,7 +252,8 @@ export const PageContent: GlobalConfig = {
           type: 'array',
           label: 'Values Cards',
           admin: {
-            description: 'Cards shown in the values section. You can add, remove, and reorder them.',
+            description:
+              'Cards shown in the values section. You can add, remove, and reorder them.',
           },
           defaultValue: [
             {

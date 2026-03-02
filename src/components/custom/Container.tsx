@@ -1,4 +1,5 @@
 import { type HTMLAttributes, forwardRef } from 'react'
+import { cn } from '@/lib/utils'
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   /**
@@ -13,16 +14,12 @@ interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
 const Container = forwardRef<HTMLDivElement, ContainerProps>(
   ({ className = '', size = 'default', children, ...props }, ref) => {
     const sizeClass =
-      size === 'narrow'
-        ? 'max-w-3xl'
-        : size === 'wide'
-          ? 'max-w-screen-2xl'
-          : 'max-w-7xl'
+      size === 'narrow' ? 'max-w-3xl' : size === 'wide' ? 'max-w-screen-2xl' : 'max-w-7xl'
 
     return (
       <div
         ref={ref}
-        className={`mx-auto w-full px-4 sm:px-6 lg:px-8 ${sizeClass} ${className}`}
+        className={cn('mx-auto w-full px-4 sm:px-6 lg:px-8', sizeClass, className)}
         {...props}
       >
         {children}
