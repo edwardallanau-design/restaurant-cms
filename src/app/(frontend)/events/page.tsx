@@ -20,10 +20,7 @@ const getEventsData = unstable_cache(
       payload.find({
         collection: 'events',
         where: {
-          and: [
-            { status: { equals: 'published' } },
-            { date: { greater_than_equal: now } },
-          ],
+          and: [{ status: { equals: 'published' } }, { date: { greater_than_equal: now } }],
         },
         sort: ['-featured', 'date'],
         limit: 50,

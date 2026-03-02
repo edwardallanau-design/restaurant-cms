@@ -1,4 +1,8 @@
-import type { SerializedEditorState, SerializedLexicalNode } from '@payloadcms/richtext-lexical/lexical'
+import type {
+  SerializedEditorState,
+  SerializedLexicalNode,
+} from '@payloadcms/richtext-lexical/lexical'
+import { cn } from '@/lib/utils'
 
 interface RichTextProps {
   content: SerializedEditorState | null | undefined
@@ -13,7 +17,7 @@ export function RichText({ content, className = '' }: RichTextProps) {
   if (!content?.root?.children) return null
 
   return (
-    <div className={`prose prose-stone max-w-none ${className}`}>
+    <div className={cn('prose prose-stone max-w-none', className)}>
       {content.root.children.map((node, i) => (
         <RichTextNode key={i} node={node} />
       ))}
@@ -36,14 +40,16 @@ function RichTextNode({ node }: { node: SerializedLexicalNode }) {
 
   switch (n.type) {
     case 'paragraph': {
-      const isEmpty = !n.children?.length || n.children.every(
-        (c) => (c as { type: string; text?: string }).type === 'text' && !(c as { text?: string }).text,
-      )
+      const isEmpty =
+        !n.children?.length ||
+        n.children.every(
+          (c) =>
+            (c as { type: string; text?: string }).type === 'text' &&
+            !(c as { text?: string }).text,
+        )
       return (
         <p>
-          {isEmpty
-            ? <br />
-            : n.children?.map((child, i) => <RichTextNode key={i} node={child} />)}
+          {isEmpty ? <br /> : n.children?.map((child, i) => <RichTextNode key={i} node={child} />)}
         </p>
       )
     }

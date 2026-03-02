@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { MobileNav } from './MobileNav'
 import type { SiteSetting as SiteSettingsType } from '@/payload-types'
 import { Container } from '@/components/custom/Container'
+import { cn } from '@/lib/utils'
 
 interface HeaderProps {
   settings: Pick<SiteSettingsType, 'restaurantName' | 'logo' | 'navigation'>
@@ -26,9 +27,10 @@ export function Header({ settings }: HeaderProps) {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-          scrolled ? 'bg-white/95 shadow-sm backdrop-blur-sm' : 'bg-transparent'
-        }`}
+        className={cn(
+          'fixed inset-x-0 top-0 z-50 transition-all duration-300',
+          scrolled ? 'bg-white/95 shadow-sm backdrop-blur-sm' : 'bg-transparent',
+        )}
       >
         <Container>
           <nav
@@ -48,9 +50,10 @@ export function Header({ settings }: HeaderProps) {
                 />
               ) : (
                 <span
-                  className={`font-serif text-xl font-bold sm:text-2xl ${
-                    scrolled ? 'text-primary-900' : 'text-white'
-                  }`}
+                  className={cn(
+                    'font-serif text-xl font-bold sm:text-2xl',
+                    scrolled ? 'text-primary-900' : 'text-white',
+                  )}
                 >
                   {settings.restaurantName ?? 'Restaurant'}
                 </span>
@@ -63,9 +66,10 @@ export function Header({ settings }: HeaderProps) {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`text-sm font-medium transition-colors hover:text-primary-500 ${
-                      scrolled ? 'text-gray-700' : 'text-white/90'
-                    }`}
+                    className={cn(
+                      'text-sm font-medium transition-colors hover:text-primary-500',
+                      scrolled ? 'text-gray-700' : 'text-white/90',
+                    )}
                   >
                     {label}
                   </Link>
@@ -80,9 +84,7 @@ export function Header({ settings }: HeaderProps) {
               aria-label="Open menu"
               aria-expanded={mobileOpen}
             >
-              <HamburgerIcon
-                className={`h-6 w-6 ${scrolled ? 'text-gray-900' : 'text-white'}`}
-              />
+              <HamburgerIcon className={cn('h-6 w-6', scrolled ? 'text-gray-900' : 'text-white')} />
             </button>
           </nav>
         </Container>
@@ -108,7 +110,11 @@ function HamburgerIcon({ className }: { className?: string }) {
       stroke="currentColor"
       className={className}
     >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+      />
     </svg>
   )
 }

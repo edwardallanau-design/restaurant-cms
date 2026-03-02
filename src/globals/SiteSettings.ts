@@ -232,8 +232,7 @@ export const SiteSettings: GlobalConfig = {
       type: 'group',
       label: 'Default SEO',
       admin: {
-        description:
-          'Fallback metadata used when a page does not have its own SEO fields.',
+        description: 'Fallback metadata used when a page does not have its own SEO fields.',
       },
       fields: [
         {

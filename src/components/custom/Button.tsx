@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes, forwardRef } from 'react'
 import Link, { type LinkProps } from 'next/link'
+import { cn } from '@/lib/utils'
 
 type Variant = 'primary' | 'secondary' | 'outline' | 'ghost'
 type Size = 'sm' | 'md' | 'lg'
@@ -7,8 +8,7 @@ type Size = 'sm' | 'md' | 'lg'
 const variantClasses: Record<Variant, string> = {
   primary:
     'bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500 shadow-sm',
-  secondary:
-    'bg-primary-100 text-primary-900 hover:bg-primary-200 focus-visible:ring-primary-500',
+  secondary: 'bg-primary-100 text-primary-900 hover:bg-primary-200 focus-visible:ring-primary-500',
   outline:
     'border border-primary-600 text-primary-700 hover:bg-primary-50 focus-visible:ring-primary-500',
   ghost: 'text-primary-700 hover:bg-primary-50 focus-visible:ring-primary-500',
@@ -35,7 +35,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+        className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)}
         {...props}
       >
         {children}
@@ -54,10 +54,16 @@ interface ButtonLinkProps extends Omit<LinkProps, 'className'> {
   children: React.ReactNode
 }
 
-function ButtonLink({ className = '', variant = 'primary', size = 'md', children, ...props }: ButtonLinkProps) {
+function ButtonLink({
+  className = '',
+  variant = 'primary',
+  size = 'md',
+  children,
+  ...props
+}: ButtonLinkProps) {
   return (
     <Link
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={cn(baseClasses, variantClasses[variant], sizeClasses[size], className)}
       {...props}
     >
       {children}

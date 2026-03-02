@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { Event, Media } from '@/payload-types'
+import { cn } from '@/lib/utils'
 
 interface EventCardProps {
   event: Event
@@ -22,9 +23,10 @@ export function EventCard({ event }: EventCardProps) {
 
   return (
     <article
-      className={`overflow-hidden rounded-card bg-white ring-1 ring-gray-100 transition hover:shadow-md ${
-        isFeatured ? 'ring-primary-200 shadow-sm' : ''
-      }`}
+      className={cn(
+        'overflow-hidden rounded-card bg-white ring-1 ring-gray-100 transition hover:shadow-md',
+        isFeatured && 'shadow-sm ring-primary-200',
+      )}
     >
       {/* Image */}
       {image?.url && (
@@ -44,7 +46,7 @@ export function EventCard({ event }: EventCardProps) {
         </div>
       )}
 
-      <div className="p-6 space-y-3">
+      <div className="space-y-3 p-6">
         {/* Date badge */}
         {event.date && (
           <time

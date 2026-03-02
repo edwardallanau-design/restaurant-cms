@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 interface MobileNavProps {
   links: ReadonlyArray<{ href: string; label: string }>
@@ -27,23 +28,27 @@ export function MobileNav({ links, isOpen, onClose, restaurantName }: MobileNavP
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 md:hidden ${
-          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
-        }`}
+        className={cn(
+          'fixed inset-0 z-50 bg-black/50 transition-opacity duration-300 md:hidden',
+          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
+        )}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Drawer */}
       <aside
-        className={`fixed inset-y-0 right-0 z-50 flex w-72 flex-col bg-white shadow-2xl transition-transform duration-300 md:hidden ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={cn(
+          'fixed inset-y-0 right-0 z-50 flex w-72 flex-col bg-white shadow-2xl transition-transform duration-300 md:hidden',
+          isOpen ? 'translate-x-0' : 'translate-x-full',
+        )}
         aria-label="Mobile navigation"
       >
         {/* Header */}
         <div className="flex h-16 items-center justify-between border-b px-6">
-          <span className="font-serif text-lg font-semibold text-primary-900">{restaurantName}</span>
+          <span className="font-serif text-lg font-semibold text-primary-900">
+            {restaurantName}
+          </span>
           <button
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:text-gray-900"

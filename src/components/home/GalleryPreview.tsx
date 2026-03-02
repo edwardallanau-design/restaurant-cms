@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { GalleryImage, Media } from '@/payload-types'
+import { cn } from '@/lib/utils'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
 import { ButtonLink } from '@/components/custom/Button'
@@ -27,16 +28,20 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
         {/* Grid */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
           {displayImages.map((galleryItem, idx) => {
-            const image = typeof galleryItem.image === 'object' ? (galleryItem.image as Media) : null
+            const image =
+              typeof galleryItem.image === 'object' ? (galleryItem.image as Media) : null
             // First image is larger
             const isLarge = idx === 0
 
             return (
               <div
                 key={galleryItem.id}
-                className={`group relative overflow-hidden rounded-card bg-gray-100 ${
-                  isLarge ? 'col-span-2 row-span-2 aspect-square sm:aspect-auto sm:h-full' : 'aspect-square'
-                }`}
+                className={cn(
+                  'group relative overflow-hidden rounded-card bg-gray-100',
+                  isLarge
+                    ? 'col-span-2 row-span-2 aspect-square sm:aspect-auto sm:h-full'
+                    : 'aspect-square',
+                )}
               >
                 {image?.url ? (
                   <Image
@@ -44,7 +49,9 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
                     alt={image.alt ?? galleryItem.caption ?? 'Gallery image'}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-105"
-                    sizes={isLarge ? '(min-width: 640px) 66vw, 100vw' : '(min-width: 640px) 33vw, 50vw'}
+                    sizes={
+                      isLarge ? '(min-width: 640px) 66vw, 100vw' : '(min-width: 640px) 33vw, 50vw'
+                    }
                   />
                 ) : (
                   <div className="h-full bg-primary-50" />

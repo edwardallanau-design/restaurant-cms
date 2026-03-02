@@ -1,4 +1,5 @@
 import { type HTMLAttributes, forwardRef } from 'react'
+import { cn } from '@/lib/utils'
 
 interface SectionProps extends HTMLAttributes<HTMLElement> {
   as?: 'section' | 'div' | 'article' | 'aside'
@@ -24,7 +25,7 @@ const Section = forwardRef<HTMLElement, SectionProps>(
   ({ as: Tag = 'section', className = '', padding = 'default', children, ...props }, ref) => {
     return (
       // @ts-expect-error – `ref` typing for polymorphic component
-      <Tag ref={ref} className={`${paddingMap[padding]} ${className}`} {...props}>
+      <Tag ref={ref} className={cn(paddingMap[padding], className)} {...props}>
         {children}
       </Tag>
     )

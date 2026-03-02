@@ -20,7 +20,11 @@ const DIETARY_LABELS: Record<string, string> = {
   'chefs-special': '★',
 }
 
-export function FeaturedMenu({ items, eyebrow = 'Our Selection', heading = 'Featured Dishes' }: FeaturedMenuProps) {
+export function FeaturedMenu({
+  items,
+  eyebrow = 'Our Selection',
+  heading = 'Featured Dishes',
+}: FeaturedMenuProps) {
   if (!items.length) return null
 
   return (
@@ -31,9 +35,7 @@ export function FeaturedMenu({ items, eyebrow = 'Our Selection', heading = 'Feat
           <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-500">
             {eyebrow}
           </p>
-          <h2 className="font-serif text-3xl font-bold text-gray-900 sm:text-4xl">
-            {heading}
-          </h2>
+          <h2 className="font-serif text-3xl font-bold text-gray-900 sm:text-4xl">{heading}</h2>
         </div>
 
         {/* Grid */}
@@ -57,8 +59,19 @@ export function FeaturedMenu({ items, eyebrow = 'Our Selection', heading = 'Feat
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center bg-primary-50 text-primary-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="h-12 w-12">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 21H3v-1a6 6 0 0 1 12 0v1Zm0 0h6v-1a6 6 0 0 0-9-5.197M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1}
+                        stroke="currentColor"
+                        className="h-12 w-12"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 21H3v-1a6 6 0 0 1 12 0v1Zm0 0h6v-1a6 6 0 0 0-9-5.197M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+                        />
                       </svg>
                     </div>
                   )}
