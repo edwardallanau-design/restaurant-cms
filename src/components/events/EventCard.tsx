@@ -30,7 +30,7 @@ export function EventCard({ event }: EventCardProps) {
       {image?.url && (
         <div className="relative aspect-video overflow-hidden bg-gray-100">
           <Image
-            src={image.url}
+            src={image.sizes?.card?.url ?? image.url}
             alt={image.alt ?? event.title}
             fill
             className="object-cover transition duration-500 hover:scale-105"

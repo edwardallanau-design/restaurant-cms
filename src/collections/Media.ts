@@ -62,5 +62,10 @@ export const Media: CollectionConfig = {
         safeRevalidateTag(CACHE_TAGS.media)
       },
     ],
+    afterDelete: [
+      () => {
+        safeRevalidateTag(CACHE_TAGS.media)
+      },
+    ],
   },
 }

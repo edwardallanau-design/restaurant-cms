@@ -49,7 +49,7 @@ export function FeaturedMenu({ items, eyebrow = 'Our Selection', heading = 'Feat
                 <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
                   {image?.url ? (
                     <Image
-                      src={image.url}
+                      src={image.sizes?.card?.url ?? image.url}
                       alt={image.alt ?? item.name}
                       fill
                       className="object-cover transition duration-500 group-hover:scale-105"

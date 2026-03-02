@@ -25,7 +25,7 @@ export function HeroSection({
       {/* Background Image */}
       {bgImage?.url ? (
         <Image
-          src={bgImage.url}
+          src={bgImage.sizes?.hero?.url ?? bgImage.url}
           alt={bgImage.alt ?? 'Restaurant hero image'}
           fill
           className="object-cover"

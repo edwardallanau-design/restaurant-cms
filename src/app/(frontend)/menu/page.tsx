@@ -35,7 +35,7 @@ const getMenuData = unstable_cache(
     return { categories: categories.docs, items: items.docs, content }
   },
   ['menu-page'],
-  { tags: [CACHE_TAGS.menu, CACHE_TAGS.content], revalidate: 300 },
+  { tags: [CACHE_TAGS.menu, CACHE_TAGS.content, CACHE_TAGS.media], revalidate: 300 },
 )
 
 const DIETARY_COLORS: Record<string, string> = {
@@ -143,7 +143,7 @@ function MenuItemCard({ item }: { item: MenuItem }) {
       {image?.url && (
         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md">
           <Image
-            src={image.url}
+            src={image.sizes?.thumbnail?.url ?? image.url}
             alt={image.alt ?? item.name}
             fill
             className="object-cover"
