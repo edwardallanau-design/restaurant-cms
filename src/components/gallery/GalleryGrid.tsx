@@ -36,7 +36,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
           return (
             <button
               key={galleryItem.id}
-              className="group mb-4 w-full break-inside-avoid overflow-hidden rounded-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="group mb-4 w-full break-inside-avoid overflow-hidden rounded-card focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               onClick={() => openLightbox(idx)}
               aria-label={`View photo ${idx + 1}${galleryItem.caption ? `: ${galleryItem.caption}` : ''}`}
             >
@@ -76,7 +76,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
         >
           {/* Previous */}
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/25"
+            className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/25"
             onClick={(e) => {
               e.stopPropagation()
               prev()
@@ -122,7 +122,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
 
           {/* Next */}
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/25"
+            className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/25"
             onClick={(e) => {
               e.stopPropagation()
               next()
@@ -143,7 +143,7 @@ export function GalleryGrid({ images }: GalleryGridProps) {
 
           {/* Close */}
           <button
-            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/25"
+            className="absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/25"
             onClick={closeLightbox}
             aria-label="Close lightbox"
           >

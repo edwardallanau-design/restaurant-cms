@@ -93,7 +93,7 @@ export function ContactForm() {
           rows={5}
           placeholder="Tell us how we can help..."
           className={cn(
-            'w-full rounded-md border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500',
+            'w-full rounded-md border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:outline-none',
             state.errors?.message ? 'border-red-400 bg-red-50' : 'border-gray-300 bg-white',
           )}
         />
@@ -142,7 +142,7 @@ function FormField({
         autoComplete={autoComplete}
         placeholder={placeholder}
         className={cn(
-          'w-full rounded-md border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500',
+          'w-full rounded-md border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:outline-none',
           hasError ? 'border-red-400 bg-red-50' : 'border-gray-300 bg-white',
         )}
       />

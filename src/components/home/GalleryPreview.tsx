@@ -19,7 +19,7 @@ export function GalleryPreview({ images }: GalleryPreviewProps) {
     <Section className="bg-surface">
       <Container>
         <div className="mb-12 text-center">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-500">
+          <p className="mb-2 text-sm font-semibold tracking-widest text-primary-500 uppercase">
             Our Atmosphere
           </p>
           <h2 className="font-serif text-3xl font-bold text-gray-900 sm:text-4xl">Gallery</h2>

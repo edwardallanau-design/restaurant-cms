@@ -34,9 +34,9 @@ export default async function GalleryPage() {
 
   return (
     <>
-      <div className="bg-primary-900 pb-16 pt-32 text-center text-white">
+      <div className="bg-primary-900 pt-32 pb-16 text-center text-white">
         <Container>
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-300">
+          <p className="mb-2 text-sm font-semibold tracking-widest text-primary-300 uppercase">
             {content.gallery?.eyebrow ?? 'A Visual Story'}
           </p>
           <h1 className="font-serif text-4xl font-bold sm:text-5xl">

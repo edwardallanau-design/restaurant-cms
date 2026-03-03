@@ -20,7 +20,7 @@ export function Footer({ settings }: FooterProps) {
               {restaurantName ?? 'Restaurant'}
             </h3>
             {contact?.address && (
-              <address className="text-sm not-italic leading-relaxed text-white/60">
+              <address className="text-sm leading-relaxed text-white/60 not-italic">
                 {contact.address.street && <div>{contact.address.street}</div>}
                 {(contact.address.city || contact.address.state) && (
                   <div>
@@ -53,7 +53,7 @@ export function Footer({ settings }: FooterProps) {
 
           {/* Contact */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold uppercase tracking-widest text-white/50">
+            <h4 className="text-sm font-semibold tracking-widest text-white/50 uppercase">
               Contact
             </h4>
             <ul className="space-y-2 text-sm text-white/70">
@@ -82,7 +82,7 @@ export function Footer({ settings }: FooterProps) {
 
           {/* Hours */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold uppercase tracking-widest text-white/50">Hours</h4>
+            <h4 className="text-sm font-semibold tracking-widest text-white/50 uppercase">Hours</h4>
             {hours && hours.length > 0 ? (
               <ul className="space-y-1.5 text-sm text-white/70">
                 {hours.map((h, i) => (
@@ -101,7 +101,7 @@ export function Footer({ settings }: FooterProps) {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold uppercase tracking-widest text-white/50">
+            <h4 className="text-sm font-semibold tracking-widest text-white/50 uppercase">
               Quick Links
             </h4>
             <ul className="space-y-2 text-sm">

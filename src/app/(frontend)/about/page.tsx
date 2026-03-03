@@ -60,9 +60,9 @@ export default async function AboutPage() {
   return (
     <>
       {/* Page header */}
-      <div className="bg-primary-900 pb-20 pt-32 text-center text-white">
+      <div className="bg-primary-900 pt-32 pb-20 text-center text-white">
         <Container>
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-300">
+          <p className="mb-2 text-sm font-semibold tracking-widest text-primary-300 uppercase">
             {about?.eyebrow ?? 'Who We Are'}
           </p>
           <h1 className="font-serif text-4xl font-bold sm:text-5xl">
@@ -77,7 +77,7 @@ export default async function AboutPage() {
           <Container size={storyContainerWidth}>
             <div className={`space-y-6 ${storyAlign}`}>
               {about?.tagline && (
-                <p className="font-serif text-2xl font-semibold leading-snug text-primary-700 sm:text-3xl">
+                <p className="font-serif text-2xl leading-snug font-semibold text-primary-700 sm:text-3xl">
                   &ldquo;{about.tagline}&rdquo;
                 </p>
               )}

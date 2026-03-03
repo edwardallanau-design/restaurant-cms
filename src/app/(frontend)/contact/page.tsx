@@ -31,9 +31,9 @@ export default async function ContactPage() {
   return (
     <>
       {/* Header */}
-      <div className="bg-primary-900 pb-20 pt-32 text-center text-white">
+      <div className="bg-primary-900 pt-32 pb-20 text-center text-white">
         <Container>
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary-300">
+          <p className="mb-2 text-sm font-semibold tracking-widest text-primary-300 uppercase">
             {content.contact?.eyebrow ?? 'Find Us'}
           </p>
           <h1 className="font-serif text-4xl font-bold sm:text-5xl">
