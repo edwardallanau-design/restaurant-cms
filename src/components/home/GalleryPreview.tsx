@@ -3,7 +3,7 @@ import type { GalleryImage, Media } from '@/payload-types'
 import { cn } from '@/lib/utils'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
-import { ButtonLink } from '@/components/custom/Button'
+import { ButtonLink } from '@/components/custom/ButtonLink'
 
 interface GalleryPreviewProps {
   images: GalleryImage[]

@@ -5,7 +5,7 @@ import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
-import { ButtonLink } from '@/components/custom/Button'
+import { ButtonLink } from '@/components/custom/ButtonLink'
 import { RichText } from '@/components/custom/RichText'
 import type { Media } from '@/payload-types'
 

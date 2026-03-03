@@ -2,7 +2,7 @@ import Image from 'next/image'
 import type { MenuItem, Media } from '@/payload-types'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
-import { ButtonLink } from '@/components/custom/Button'
+import { ButtonLink } from '@/components/custom/ButtonLink'
 
 interface FeaturedMenuProps {
   items: MenuItem[]
@@ -48,7 +48,7 @@ export function FeaturedMenu({
                 className="group overflow-hidden rounded-card bg-surface shadow-sm ring-1 ring-gray-100 transition hover:shadow-md"
               >
                 {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                <div className="relative aspect-4/3 overflow-hidden bg-gray-100">
                   {image?.url ? (
                     <Image
                       src={image.sizes?.card?.url ?? image.url}
