@@ -68,7 +68,7 @@ export function HeroSection({
       <Container className="relative z-10 text-center">
         <div className="mx-auto max-w-4xl space-y-6">
           {heading && (
-            <h1 className="font-serif text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="font-serif text-4xl leading-tight font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl">
               {heading}
             </h1>
           )}

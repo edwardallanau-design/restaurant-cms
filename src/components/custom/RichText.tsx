@@ -17,7 +17,7 @@ export function RichText({ content, className = '' }: RichTextProps) {
   if (!content?.root?.children) return null
 
   return (
-    <div className={cn('prose prose-stone max-w-none', className)}>
+    <div className={cn('prose max-w-none prose-stone', className)}>
       {content.root.children.map((node, i) => (
         <RichTextNode key={i} node={node} />
       ))}

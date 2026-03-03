@@ -39,7 +39,7 @@ export function EventCard({ event }: EventCardProps) {
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           />
           {isFeatured && (
-            <div className="absolute left-3 top-3 rounded-full bg-primary-600 px-3 py-1 text-xs font-semibold text-white">
+            <div className="absolute top-3 left-3 rounded-full bg-primary-600 px-3 py-1 text-xs font-semibold text-white">
               Featured
             </div>
           )}
@@ -51,7 +51,7 @@ export function EventCard({ event }: EventCardProps) {
         {event.date && (
           <time
             dateTime={event.date}
-            className="text-xs font-semibold uppercase tracking-widest text-primary-500"
+            className="text-xs font-semibold tracking-widest text-primary-500 uppercase"
           >
             {formatDate(event.date)}
             {event.endDate && ` – ${formatDate(event.endDate)}`}
