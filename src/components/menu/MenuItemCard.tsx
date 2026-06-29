@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { Media, MenuItem } from '@/payload-types'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 export const DIETARY_COLORS: Record<string, string> = {
@@ -40,15 +41,9 @@ export function MenuItemCard({ item }: { item: MenuItem }) {
         {item.dietaryFlags && item.dietaryFlags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {item.dietaryFlags.map((flag) => (
-              <span
-                key={flag}
-                className={cn(
-                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                  DIETARY_COLORS[flag] ?? 'bg-gray-100 text-gray-600',
-                )}
-              >
+              <Badge key={flag} className={cn(DIETARY_COLORS[flag] ?? 'bg-gray-100 text-gray-600')}>
                 {flag}
-              </span>
+              </Badge>
             ))}
           </div>
         )}

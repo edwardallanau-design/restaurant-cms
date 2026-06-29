@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
-import { HeroSection } from '@/components/home/HeroSection'
-import { FeaturedMenu } from '@/components/home/FeaturedMenu'
-import { GalleryPreview } from '@/components/home/GalleryPreview'
+import { HeroSection } from '@/sections/HeroSection'
+import { FeaturedMenu } from '@/sections/FeaturedMenu'
+import { GalleryPreview } from '@/sections/GalleryPreview'
 import type { Media } from '@/payload-types'
 
 // ── Cached data fetchers ────────────────────────────────────────────────────

@@ -2,7 +2,10 @@
 
 import { useActionState } from 'react'
 import { submitContactForm, type ContactFormState } from '@/lib/actions/contact'
-import { Button } from '@/components/custom/Button'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 
 const initialState: ContactFormState = { status: 'idle' }
@@ -83,19 +86,16 @@ export function ContactForm() {
 
       {/* Message */}
       <div className="space-y-1.5">
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+        <Label htmlFor="message">
           Message <span className="text-red-500">*</span>
-        </label>
-        <textarea
+        </Label>
+        <Textarea
           id="message"
           name="message"
           required
           rows={5}
           placeholder="Tell us how we can help..."
-          className={cn(
-            'w-full rounded-md border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:outline-none',
-            state.errors?.message ? 'border-red-400 bg-red-50' : 'border-gray-300 bg-white',
-          )}
+          className={cn(state.errors?.message && 'border-red-400 bg-red-50')}
         />
         {state.errors?.message && <p className="text-xs text-red-600">{state.errors.message[0]}</p>}
       </div>
@@ -131,20 +131,17 @@ function FormField({
   const hasError = Boolean(errors?.length)
   return (
     <div className="space-y-1.5">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+      <Label htmlFor={name}>
         {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <input
+      </Label>
+      <Input
         id={name}
         name={name}
         type={type}
         required={required}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        className={cn(
-          'w-full rounded-md border px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:outline-none',
-          hasError ? 'border-red-400 bg-red-50' : 'border-gray-300 bg-white',
-        )}
+        className={cn(hasError && 'border-red-400 bg-red-50')}
       />
       {hasError && errors && <p className="text-xs text-red-600">{errors[0]}</p>}
     </div>
