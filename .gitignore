@@ -42,3 +42,6 @@ next-env.d.ts
 # OS
 .DS_Store
 Thumbs.db
+
+# Personal design/methodology doc — kept locally, not a repo artifact
+SYSTEM_DESIGN_PLAYBOOK.md
