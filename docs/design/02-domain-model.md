@@ -19,6 +19,17 @@ An agent can infer a schema from entities. It **cannot** infer invariants — so
 - **Line total** — `(unitPrice + Σ option adjustments) × quantity`.
 - **Voluntary digital-order share** — the Artifact 1 validation metric (excludes cancelled orders).
 
+## High-level flow (the journey)
+
+The narrative form of the state machines below — the path each actor takes, not the screens.
+
+- **Diner.** Scan the table QR → land on the café's menu (`/r/<slug>`) → browse categories/items → pick an item and choose its modifiers → add to cart → review cart → check out → receive an order number → show it to staff to pay in person.
+- **Staff.** Open the dashboard → see pending orders (newest first, polled ~2s) → read an order → **confirm** it (or **cancel** a bogus/duplicate) → it leaves the board.
+- **Café admin / owner.** Sign in to the Payload admin → manage the menu (categories, items, modifiers, options; soft-delete / reactivate / mark sold-out) → changes flow to the diner menu read.
+- **Platform super-admin.** Onboard a new café — create the Restaurant + slug + its admin user, seed an empty menu.
+
+> The `Order` state machine (`PENDING → CONFIRMED | CANCELLED`) derives from the diner→staff handoff; the menu-entity `active` lifecycle derives from the admin journey.
+
 ## Entities (name — key attributes — purpose)
 
 > Implementation-agnostic. DB types, indexes, and exact columns derive later. Every tenant-owned entity carries `restaurantId` (INV-7).
