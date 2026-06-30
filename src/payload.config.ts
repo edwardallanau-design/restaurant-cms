@@ -4,6 +4,7 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { Restaurants } from './collections/Restaurants.ts'
 import { Events } from './collections/Events.ts'
 import { GalleryImages } from './collections/GalleryImages.ts'
 import { Media } from './collections/Media.ts'
@@ -53,7 +54,7 @@ export default buildConfig({
   },
 
   // ── Collections & Globals ───────────────────────────────────────────────────
-  collections: [Users, Media, MenuCategories, MenuItems, GalleryImages, Events],
+  collections: [Restaurants, Users, Media, MenuCategories, MenuItems, GalleryImages, Events],
   globals: [SiteSettings, HeroSection, PageContent],
 
   // ── Editor ──────────────────────────────────────────────────────────────────

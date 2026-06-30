@@ -1,3 +1,4 @@
+export { Restaurants } from './Restaurants'
 export { Events } from './Events'
 export { GalleryImages } from './GalleryImages'
 export { Media } from './Media'
