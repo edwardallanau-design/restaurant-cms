@@ -1,0 +1,145 @@
+import type { CollectionConfig } from 'payload'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
+
+export const TenantPageContent: CollectionConfig = {
+  slug: 'tenant-page-content',
+  admin: {
+    group: 'Settings',
+    description: 'Editable static text for page headers and sections.',
+  },
+  access: {
+    read: () => true,
+    create: ({ req: { user } }) => Boolean(user),
+    update: ({ req: { user } }) => Boolean(user),
+    delete: ({ req: { user } }) => Boolean(user),
+  },
+  fields: [
+    {
+      name: 'home',
+      type: 'group',
+      label: 'Home Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'eyebrow', type: 'text', label: 'Featured Section Eyebrow', defaultValue: 'Our Selection', admin: { width: '50%' } },
+            { name: 'headerTitle', type: 'text', label: 'Featured Section Heading', defaultValue: 'Featured Dishes', admin: { width: '50%' } },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'menu',
+      type: 'group',
+      label: 'Menu Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'eyebrow', type: 'text', label: 'Eyebrow Text', defaultValue: 'What We Offer', admin: { width: '50%' } },
+            { name: 'headerTitle', type: 'text', label: 'Page Title', defaultValue: 'Our Menu', admin: { width: '50%' } },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'gallery',
+      type: 'group',
+      label: 'Gallery Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'eyebrow', type: 'text', label: 'Eyebrow Text', defaultValue: 'A Visual Story', admin: { width: '50%' } },
+            { name: 'headerTitle', type: 'text', label: 'Page Title', defaultValue: 'Gallery', admin: { width: '50%' } },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'events',
+      type: 'group',
+      label: 'Events Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'eyebrow', type: 'text', label: 'Eyebrow Text', defaultValue: "What's Coming Up", admin: { width: '50%' } },
+            { name: 'headerTitle', type: 'text', label: 'Page Title', defaultValue: 'Events & Specials', admin: { width: '50%' } },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'contact',
+      type: 'group',
+      label: 'Contact Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'eyebrow', type: 'text', label: 'Eyebrow Text', defaultValue: 'Find Us', admin: { width: '50%' } },
+            { name: 'headerTitle', type: 'text', label: 'Page Title', defaultValue: 'Contact & Location', admin: { width: '50%' } },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'about',
+      type: 'group',
+      label: 'About Page',
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'eyebrow', type: 'text', label: 'Eyebrow Text', defaultValue: 'Who We Are', admin: { width: '50%' } },
+            { name: 'headerTitle', type: 'text', label: 'Page Title', defaultValue: 'About Us', admin: { width: '50%' } },
+          ],
+        },
+        { name: 'tagline', type: 'text', label: 'Tagline' },
+        { name: 'story', type: 'richText', label: 'Story / Introduction' },
+        {
+          name: 'storyFormatting',
+          type: 'group',
+          label: 'Story Section Formatting',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'background', type: 'select', label: 'Background', defaultValue: 'white', admin: { width: '33%' }, options: [{ label: 'White', value: 'white' }, { label: 'Off-white (Surface)', value: 'surface' }, { label: 'Primary Light', value: 'primary-light' }] },
+                { name: 'textAlign', type: 'select', label: 'Text Alignment', defaultValue: 'center', admin: { width: '33%' }, options: [{ label: 'Center', value: 'center' }, { label: 'Left', value: 'left' }] },
+                { name: 'containerWidth', type: 'select', label: 'Container Width', defaultValue: 'narrow', admin: { width: '33%' }, options: [{ label: 'Narrow', value: 'narrow' }, { label: 'Default', value: 'default' }, { label: 'Wide', value: 'wide' }] },
+              ],
+            },
+          ],
+        },
+        { name: 'valuesHeading', type: 'text', label: 'Values Section Heading', defaultValue: 'Our Values' },
+        {
+          name: 'values',
+          type: 'array',
+          label: 'Values Cards',
+          defaultValue: [
+            { icon: '🌿', title: 'Fresh & Seasonal', description: 'We source the finest local and seasonal ingredients.' },
+            { icon: '👨‍🍳', title: 'Crafted with Care', description: 'Every plate is prepared with time-honoured techniques.' },
+            { icon: '🤝', title: 'Warm Hospitality', description: 'From the moment you walk in, we treat every guest like family.' },
+          ],
+          fields: [
+            { type: 'row', fields: [{ name: 'icon', type: 'text', label: 'Icon (emoji)', admin: { width: '20%' } }, { name: 'title', type: 'text', label: 'Title', required: true, admin: { width: '80%' } }] },
+            { name: 'description', type: 'textarea', label: 'Description', required: true },
+          ],
+        },
+        { name: 'ctaHeading', type: 'text', label: 'CTA Heading', defaultValue: 'Come Visit Us' },
+        { name: 'ctaSubtext', type: 'text', label: 'CTA Subtext', defaultValue: "We'd love to welcome you." },
+        { type: 'row', fields: [{ name: 'ctaPrimaryText', type: 'text', label: 'Primary Button Text', defaultValue: 'View Our Menu', admin: { width: '50%' } }, { name: 'ctaSecondaryText', type: 'text', label: 'Secondary Button Text', defaultValue: 'Contact Us', admin: { width: '50%' } }] },
+      ],
+    },
+  ],
+  hooks: {
+    afterChange: [
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.content)
+      },
+    ],
+  },
+}
