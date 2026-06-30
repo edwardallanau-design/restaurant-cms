@@ -50,7 +50,7 @@ Parts of this (`server/`, `api/shop`, the `Restaurant`/`Modifiers`/`Orders` coll
 - `npm run dev` — local dev server
 - `npm run generate:types` — regenerate `src/payload-types.ts` after editing collections (needs `"type":"module"`)
 - `npm run lint`
-- `npm test` — **Vitest + React Testing Library** (per `docs/design/06-engineering-standards.md`)
+- `npm test` — **Vitest + React Testing Library** (per `docs/design/06b-engineering-decisions.md` §7)
 - Payload owns the schema/migrations (`payload migrate`) — no Prisma.
 
 ## Working agreement (how we build)
@@ -61,7 +61,9 @@ Parts of this (`server/`, `api/shop`, the `Restaurant`/`Modifiers`/`Orders` coll
 - **Update `docs/BUILD_STATUS.md`** when a story lands.
 
 ## Context-package index (load per story)
-Product/constraints → `docs/design/01-product-and-constraints.md` · Domain model → `02-domain-model.md` · Tenancy → `03-tenancy-model.md` · Architecture/ADRs → `04-architecture.md` · API conventions → `05-api-conventions.md` · Engineering standards → `06-engineering-standards.md` · Epic map/stories → `07-epic-map.md`
+Intent & constraints (build mode) → `docs/design/01-intent-and-constraints.md` · Domain model → `02-domain-model.md` · Tenancy → `03-tenancy-model.md` · Architecture/ADRs → `04-architecture.md` · API conventions → `docs/design/05-api-conventions.md` · Engineering **principles** (universal) → `docs/design/06a-engineering-principles.md` · Engineering **decisions** (this system) → `docs/design/06b-engineering-decisions.md` · Epic map/stories → `07-epic-map.md`
+
+**Build mode: Product.** All code conforms to `06a-engineering-principles.md` + `06b-engineering-decisions.md`; apply the Product-mode dial (Full on the ordering transaction path + tenancy, collapsed elsewhere; floors always hold) and name + justify any pattern used.
 
 ## Stop rules (ask before doing)
 Anything irreversible or one-way: touching the tenancy model / data-access choke-point, schema migrations, auth, deleting data — or executing the **superseded** Prisma phase-0 plan (don't). Flag, don't guess.
