@@ -26,7 +26,6 @@ export const MenuCategories: CollectionConfig = {
       name: 'slug',
       type: 'text',
       label: 'Slug',
-      unique: true,
       admin: {
         description: 'URL-safe identifier. Auto-generated from name if left blank.',
         position: 'sidebar',
@@ -63,6 +62,12 @@ export const MenuCategories: CollectionConfig = {
         description: 'Lower numbers appear first.',
         position: 'sidebar',
       },
+    },
+  ],
+  indexes: [
+    {
+      fields: ['restaurant', 'slug'],
+      unique: true,
     },
   ],
   hooks: {

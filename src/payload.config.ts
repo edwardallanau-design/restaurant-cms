@@ -4,6 +4,7 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
 import { Restaurants } from './collections/Restaurants.ts'
 import { TenantSiteSettings } from './collections/TenantSiteSettings.ts'
 import { TenantHeroSections } from './collections/TenantHeroSections.ts'
@@ -14,9 +15,6 @@ import { Media } from './collections/Media.ts'
 import { MenuCategories } from './collections/MenuCategories.ts'
 import { MenuItems } from './collections/MenuItems.ts'
 import { Users } from './collections/Users.ts'
-import { HeroSection } from './globals/HeroSection.ts'
-import { PageContent } from './globals/PageContent.ts'
-import { SiteSettings } from './globals/SiteSettings.ts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -69,7 +67,7 @@ export default buildConfig({
     GalleryImages,
     Events,
   ],
-  globals: [SiteSettings, HeroSection, PageContent],
+  globals: [],
 
   // ── Editor ──────────────────────────────────────────────────────────────────
   editor: lexicalEditor({
@@ -94,6 +92,28 @@ export default buildConfig({
   // ── File Storage ─────────────────────────────────────────────────────────────
   // In production: Vercel Blob. In development: local filesystem.
   plugins: [
+    multiTenantPlugin({
+      tenantsSlug: 'restaurants',
+      tenantField: {
+        name: 'restaurant',
+      },
+      collections: {
+        'menu-categories': {},
+        'menu-items': {},
+        'gallery-images': {},
+        events: {},
+        'tenant-site-settings': { isGlobal: true },
+        'tenant-hero-sections': { isGlobal: true },
+        'tenant-page-content': { isGlobal: true },
+      },
+      tenantsArrayField: {
+        includeDefaultField: true,
+      },
+      userHasAccessToAllTenants: (user) => {
+        const u = user as { tenants?: unknown[] } | null
+        return !u?.tenants || u.tenants.length === 0
+      },
+    }),
     ...(process.env['BLOB_READ_WRITE_TOKEN']
       ? [
           vercelBlobStorage({

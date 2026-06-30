@@ -1,3 +1,2 @@
-export { HeroSection } from './HeroSection'
-export { PageContent } from './PageContent'
-export { SiteSettings } from './SiteSettings'
+// Globals converted to per-tenant collections in S0. See src/collections/Tenant*.ts
+export {}
