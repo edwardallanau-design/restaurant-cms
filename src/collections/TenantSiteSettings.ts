@@ -45,7 +45,7 @@ export const TenantSiteSettings: CollectionConfig = {
       type: 'array',
       label: 'Navigation Links',
       admin: {
-        description: 'Links shown in the header and footer.',
+        description: 'Links shown in the header and footer. Reorder, add, or remove as needed.',
       },
       defaultValue: [
         { label: 'Home', href: '/' },
@@ -94,21 +94,29 @@ export const TenantSiteSettings: CollectionConfig = {
             },
           ],
         },
-        { name: 'googleMapsEmbedUrl', type: 'text', label: 'Google Maps Embed URL' },
+        {
+          name: 'googleMapsEmbedUrl',
+          type: 'text',
+          label: 'Google Maps Embed URL',
+          admin: {
+            description:
+              'Paste the embed URL from Google Maps (Share → Embed a map → Copy HTML, extract the src URL).',
+          },
+        },
       ],
     },
     {
       name: 'hours',
       type: 'array',
       label: 'Opening Hours',
-      admin: { description: 'Add one row per day or day range.' },
+      admin: { description: 'Add one row per day or day range (e.g. "Mon–Fri").' },
       fields: [
         {
           type: 'row',
           fields: [
-            { name: 'day', type: 'text', label: 'Day(s)', required: true, admin: { width: '30%', placeholder: 'Monday–Friday' } },
-            { name: 'openTime', type: 'text', label: 'Opens', admin: { width: '25%', placeholder: '11:00 AM' } },
-            { name: 'closeTime', type: 'text', label: 'Closes', admin: { width: '25%', placeholder: '10:00 PM' } },
+            { name: 'day', type: 'text', label: 'Day(s)', required: true, admin: { width: '30%', placeholder: 'e.g. Monday–Friday' } },
+            { name: 'openTime', type: 'text', label: 'Opens', admin: { width: '25%', placeholder: 'e.g. 11:00 AM' } },
+            { name: 'closeTime', type: 'text', label: 'Closes', admin: { width: '25%', placeholder: 'e.g. 10:00 PM' } },
             { name: 'closed', type: 'checkbox', label: 'Closed', defaultValue: false, admin: { width: '20%' } },
           ],
         },
@@ -133,10 +141,28 @@ export const TenantSiteSettings: CollectionConfig = {
       name: 'seo',
       type: 'group',
       label: 'Default SEO',
+      admin: {
+        description: 'Fallback metadata used when a page does not have its own SEO fields.',
+      },
       fields: [
         { name: 'metaTitle', type: 'text', label: 'Default Meta Title' },
-        { name: 'metaDescription', type: 'textarea', label: 'Default Meta Description' },
-        { name: 'ogImage', type: 'upload', relationTo: 'media', label: 'Default OG Image' },
+        {
+          name: 'metaDescription',
+          type: 'textarea',
+          label: 'Default Meta Description',
+          admin: {
+            description: 'Aim for 120–160 characters.',
+          },
+        },
+        {
+          name: 'ogImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Default OG Image',
+          admin: {
+            description: 'Recommended size: 1200 × 630 px.',
+          },
+        },
       ],
     },
   ],
