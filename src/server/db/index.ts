@@ -2,9 +2,11 @@ export { resolveSlug } from './restaurants'
 export { getSettingsForTenant, getHeroForTenant, getPageContentForTenant } from './settings'
 export { getMenuForTenant } from './menu'
 export type { MenuCategoryView, MenuItemView, MenuModifierView, MenuOptionView } from './menu'
-export { getMenuItemsForValidation } from './orders'
+export { getMenuItemsForValidation, createOrderForTenant } from './orders'
 export type {
   ValidationMenuItemView,
   ValidationModifierView,
   ValidationOptionView,
+  PricedOrderItem,
+  CreateOrderResult,
 } from './orders'

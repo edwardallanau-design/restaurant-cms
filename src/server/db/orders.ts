@@ -1,5 +1,6 @@
 import { getPayload } from '@/lib/payload'
-import type { MenuItem, Modifier, ModifierOption } from '@/payload-types'
+import { commitTransaction, killTransaction } from 'payload'
+import type { MenuItem, Modifier, ModifierOption, Order } from '@/payload-types'
 
 export interface ValidationOptionView {
   id: number
@@ -87,4 +88,85 @@ export async function getMenuItemsForValidation(
     active: item.available ?? true,
     modifiers: modifiersByItem.get(item.id) ?? [],
   }))
+}
+
+export interface PricedOrderItem {
+  menuItem: number
+  itemName: string
+  unitPrice: number
+  quantity: number
+  selectedModifiers: unknown
+}
+
+export interface CreateOrderResult {
+  orderNumber: string
+  totalPrice: number
+  status: string
+  createdAt: string
+}
+
+export async function createOrderForTenant(
+  restaurantId: number,
+  items: PricedOrderItem[],
+  totalPrice: number,
+): Promise<CreateOrderResult> {
+  const payload = await getPayload()
+  const beginResult = await payload.db.beginTransaction()
+
+  if (beginResult === null) {
+    throw new Error(
+      'createOrderForTenant requires a transaction-capable database adapter, but beginTransaction() returned null',
+    )
+  }
+
+  const transactionID = beginResult
+  const req = { payload, transactionID }
+
+  try {
+    const restaurant = await payload.findByID({
+      collection: 'restaurants',
+      id: restaurantId,
+      req: { transactionID },
+    })
+
+    const sequenceNumber = (restaurant.lastOrderSequence ?? 0) + 1
+
+    await payload.update({
+      collection: 'restaurants',
+      id: restaurantId,
+      data: { lastOrderSequence: sequenceNumber },
+      req: { transactionID },
+    })
+
+    const orderNumber = `ORD-${String(sequenceNumber).padStart(4, '0')}`
+
+    const order = await payload.create({
+      collection: 'orders',
+      data: {
+        restaurant: restaurantId,
+        sequenceNumber,
+        orderNumber,
+        status: 'PENDING',
+        totalPrice,
+        // items have already been priced/validated (Task 5's checkout service) by the time
+        // they reach this transactional write; selectedModifiers is stored as an opaque JSON
+        // snapshot (INV-3), which is wider in PricedOrderItem (`unknown`) than the generated
+        // JSON-field union Payload's Create type expects.
+        items: items as unknown as Order['items'],
+      },
+      req: { transactionID },
+    })
+
+    await commitTransaction(req)
+
+    return {
+      orderNumber: order.orderNumber,
+      totalPrice: order.totalPrice,
+      status: order.status,
+      createdAt: order.createdAt,
+    }
+  } catch (err) {
+    await killTransaction(req)
+    throw err
+  }
 }

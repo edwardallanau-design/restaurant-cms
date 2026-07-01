@@ -1,12 +1,31 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockFind = vi.fn()
+const mockFindByID = vi.fn()
+const mockUpdate = vi.fn()
+const mockCreate = vi.fn()
+const mockBeginTransaction = vi.fn()
+const mockCommitTransaction = vi.fn()
+const mockKillTransaction = vi.fn()
 
 vi.mock('@/lib/payload', () => ({
-  getPayload: vi.fn(() => Promise.resolve({ find: mockFind })),
+  getPayload: vi.fn(() =>
+    Promise.resolve({
+      find: mockFind,
+      findByID: mockFindByID,
+      update: mockUpdate,
+      create: mockCreate,
+      db: { beginTransaction: mockBeginTransaction },
+    }),
+  ),
 }))
 
-const { getMenuItemsForValidation } = await import('../orders')
+vi.mock('payload', () => ({
+  commitTransaction: mockCommitTransaction,
+  killTransaction: mockKillTransaction,
+}))
+
+const { getMenuItemsForValidation, createOrderForTenant } = await import('../orders')
 
 const PILOT_ID = 1
 
@@ -101,5 +120,63 @@ describe('getMenuItemsForValidation', () => {
 
     expect(result).toEqual([{ id: 10, name: 'Pilot Item', price: 1, active: true, modifiers: [] }])
     expect(result.some((i) => i.name === 'Decoy Item')).toBe(false)
+  })
+})
+
+describe('createOrderForTenant', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockBeginTransaction.mockResolvedValue('txn-1')
+    mockFindByID.mockResolvedValue({ id: PILOT_ID, lastOrderSequence: 5 })
+    mockUpdate.mockResolvedValue({ id: PILOT_ID, lastOrderSequence: 6 })
+    mockCreate.mockImplementation(({ data }: { data: Record<string, unknown> }) =>
+      Promise.resolve({ ...data, id: 999, createdAt: '2026-07-02T00:00:00.000Z' }),
+    )
+    mockCommitTransaction.mockResolvedValue(undefined)
+    mockKillTransaction.mockResolvedValue(undefined)
+  })
+
+  it('locks the restaurant row, increments the sequence, and creates the order with a zero-padded order number', async () => {
+    const items = [
+      {
+        menuItem: 10,
+        itemName: 'Cappuccino',
+        unitPrice: 4.5,
+        quantity: 2,
+        selectedModifiers: [{ modifierName: 'Size', options: [{ label: 'Large', priceAdjustment: 1 }] }],
+      },
+    ]
+
+    const result = await createOrderForTenant(PILOT_ID, items, 13.5)
+
+    expect(mockFindByID).toHaveBeenCalledWith({
+      collection: 'restaurants',
+      id: PILOT_ID,
+      req: { transactionID: 'txn-1' },
+    })
+    expect(mockUpdate).toHaveBeenCalledWith({
+      collection: 'restaurants',
+      id: PILOT_ID,
+      data: { lastOrderSequence: 6 },
+      req: { transactionID: 'txn-1' },
+    })
+    expect(mockCreate).toHaveBeenCalledWith({
+      collection: 'orders',
+      data: {
+        restaurant: PILOT_ID,
+        sequenceNumber: 6,
+        orderNumber: 'ORD-0006',
+        status: 'PENDING',
+        totalPrice: 13.5,
+        items,
+      },
+      req: { transactionID: 'txn-1' },
+    })
+    expect(result).toEqual({
+      orderNumber: 'ORD-0006',
+      totalPrice: 13.5,
+      status: 'PENDING',
+      createdAt: '2026-07-02T00:00:00.000Z',
+    })
   })
 })
