@@ -16,6 +16,7 @@ import { MenuCategories } from './collections/MenuCategories.ts'
 import { MenuItems } from './collections/MenuItems.ts'
 import { Modifiers } from './collections/Modifiers.ts'
 import { ModifierOptions } from './collections/ModifierOptions.ts'
+import { Orders } from './collections/Orders.ts'
 import { Users } from './collections/Users.ts'
 
 const filename = fileURLToPath(import.meta.url)
@@ -68,6 +69,7 @@ export default buildConfig({
     MenuItems,
     Modifiers,
     ModifierOptions,
+    Orders,
     GalleryImages,
     Events,
   ],
@@ -106,6 +108,7 @@ export default buildConfig({
         'menu-items': {},
         modifiers: {},
         'modifier-options': {},
+        orders: {},
         'gallery-images': {},
         events: {},
         'tenant-site-settings': { isGlobal: true },

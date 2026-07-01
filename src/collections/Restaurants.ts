@@ -50,5 +50,14 @@ export const Restaurants: CollectionConfig = {
         description: 'Inactive restaurants resolve to 404 on diner routes.',
       },
     },
+    {
+      name: 'lastOrderSequence',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Internal counter for the next order number (INV-6). Do not edit directly.',
+      },
+    },
   ],
 }
