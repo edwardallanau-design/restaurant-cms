@@ -59,7 +59,6 @@ export async function getMenuForTenant(restaurantId: number): Promise<MenuCatego
 
   const optionsByModifier = new Map<number, MenuOptionView[]>()
   for (const option of options.docs as ModifierOption[]) {
-    if (option.modifier == null) continue
     const modifierId = typeof option.modifier === 'number' ? option.modifier : option.modifier.id
     const list = optionsByModifier.get(modifierId) ?? []
     list.push({ id: option.id, label: option.label, priceAdjustment: option.priceAdjustment ?? 0 })
@@ -68,7 +67,6 @@ export async function getMenuForTenant(restaurantId: number): Promise<MenuCatego
 
   const modifiersByItem = new Map<number, MenuModifierView[]>()
   for (const modifier of modifiers.docs as Modifier[]) {
-    if (modifier.menuItem == null) continue
     const itemId = typeof modifier.menuItem === 'number' ? modifier.menuItem : modifier.menuItem.id
     const list = modifiersByItem.get(itemId) ?? []
     list.push({
@@ -83,7 +81,6 @@ export async function getMenuForTenant(restaurantId: number): Promise<MenuCatego
 
   const itemsByCategory = new Map<number, MenuItemView[]>()
   for (const item of items.docs as MenuItem[]) {
-    if (item.category == null) continue
     const categoryId = typeof item.category === 'number' ? item.category : item.category.id
     const list = itemsByCategory.get(categoryId) ?? []
     list.push({

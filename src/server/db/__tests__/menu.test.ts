@@ -106,16 +106,67 @@ describe('getMenuForTenant', () => {
   })
 
   it('never mixes decoy tenant rows into a pilot query', async () => {
-    mockFind.mockImplementation(({ where }: { where: { restaurant: { equals: number } } }) => {
-      if (where.restaurant.equals === PILOT_ID) {
-        return Promise.resolve({ docs: [{ id: 1, name: 'Pilot Category', order: 1 }] })
-      }
-      return Promise.resolve({ docs: [{ id: 2, name: 'Decoy Category', order: 1 }] })
-    })
+    mockFind.mockImplementation(
+      ({ collection, where }: { collection: string; where: { restaurant: { equals: number } } }) => {
+        const isPilot = where.restaurant.equals === PILOT_ID
+        if (collection === 'menu-categories') {
+          return Promise.resolve({
+            docs: isPilot
+              ? [{ id: 1, name: 'Pilot Category', order: 1 }]
+              : [{ id: 2, name: 'Decoy Category', order: 1 }],
+          })
+        }
+        if (collection === 'menu-items') {
+          return Promise.resolve({
+            docs: isPilot
+              ? [{ id: 10, name: 'Pilot Item', description: null, price: 1, category: 1 }]
+              : [{ id: 20, name: 'Decoy Item', description: null, price: 1, category: 2 }],
+          })
+        }
+        if (collection === 'modifiers') {
+          return Promise.resolve({
+            docs: isPilot
+              ? [{ id: 101, name: 'Pilot Modifier', type: 'single', required: true, menuItem: 10 }]
+              : [{ id: 102, name: 'Decoy Modifier', type: 'single', required: true, menuItem: 20 }],
+          })
+        }
+        if (collection === 'modifier-options') {
+          return Promise.resolve({
+            docs: isPilot
+              ? [{ id: 201, label: 'Pilot Option', priceAdjustment: 0, modifier: 101 }]
+              : [{ id: 202, label: 'Decoy Option', priceAdjustment: 0, modifier: 102 }],
+          })
+        }
+        return Promise.resolve({ docs: [] })
+      },
+    )
 
     const result = await getMenuForTenant(PILOT_ID)
 
-    expect(result).toEqual([{ id: 1, name: 'Pilot Category', order: 1, items: [] }])
+    expect(result).toEqual([
+      {
+        id: 1,
+        name: 'Pilot Category',
+        order: 1,
+        items: [
+          {
+            id: 10,
+            name: 'Pilot Item',
+            description: null,
+            price: 1,
+            modifiers: [
+              {
+                id: 101,
+                name: 'Pilot Modifier',
+                type: 'single',
+                required: true,
+                options: [{ id: 201, label: 'Pilot Option', priceAdjustment: 0 }],
+              },
+            ],
+          },
+        ],
+      },
+    ])
     expect(result.some((c) => c.name === 'Decoy Category')).toBe(false)
   })
 })
