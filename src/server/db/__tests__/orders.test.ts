@@ -179,4 +179,16 @@ describe('createOrderForTenant', () => {
       createdAt: '2026-07-02T00:00:00.000Z',
     })
   })
+
+  it('kills the transaction and rethrows when the order create fails', async () => {
+    const createError = new Error('insert failed')
+    mockCreate.mockRejectedValue(createError)
+
+    await expect(createOrderForTenant(PILOT_ID, [], 0)).rejects.toBe(createError)
+
+    expect(mockKillTransaction).toHaveBeenCalledWith(
+      expect.objectContaining({ transactionID: 'txn-1' }),
+    )
+    expect(mockCommitTransaction).not.toHaveBeenCalled()
+  })
 })
