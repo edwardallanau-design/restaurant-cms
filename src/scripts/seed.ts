@@ -1,6 +1,7 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
+// production mode suppresses Payload dev-mode schema push during seeding
 async function seed() {
   const payload = await getPayload({ config })
 

@@ -346,32 +346,32 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   DROP TABLE "restaurants" CASCADE;
-  DROP TABLE "tenant_site_settings_navigation" CASCADE;
-  DROP TABLE "tenant_site_settings_hours" CASCADE;
-  DROP TABLE "tenant_site_settings" CASCADE;
-  DROP TABLE "tenant_hero_sections" CASCADE;
-  DROP TABLE "tenant_page_content_about_values" CASCADE;
-  DROP TABLE "tenant_page_content" CASCADE;
-  DROP TABLE "users_tenants" CASCADE;
-  DROP TABLE "users_sessions" CASCADE;
-  DROP TABLE "users" CASCADE;
-  DROP TABLE "media" CASCADE;
-  DROP TABLE "menu_categories" CASCADE;
-  DROP TABLE "menu_items_dietary_flags" CASCADE;
-  DROP TABLE "menu_items" CASCADE;
-  DROP TABLE "gallery_images" CASCADE;
-  DROP TABLE "events" CASCADE;
-  DROP TABLE "payload_kv" CASCADE;
-  DROP TABLE "payload_locked_documents" CASCADE;
-  DROP TABLE "payload_locked_documents_rels" CASCADE;
-  DROP TABLE "payload_preferences" CASCADE;
-  DROP TABLE "payload_preferences_rels" CASCADE;
-  DROP TABLE "payload_migrations" CASCADE;
-  DROP TYPE "public"."enum_tenant_page_content_about_story_formatting_background";
-  DROP TYPE "public"."enum_tenant_page_content_about_story_formatting_text_align";
-  DROP TYPE "public"."enum_tenant_page_content_about_story_formatting_container_width";
-  DROP TYPE "public"."enum_users_role";
-  DROP TYPE "public"."enum_menu_items_dietary_flags";
-  DROP TYPE "public"."enum_events_status";`)
+   DROP TABLE IF EXISTS "restaurants" CASCADE;
+  DROP TABLE IF EXISTS "tenant_site_settings_navigation" CASCADE;
+  DROP TABLE IF EXISTS "tenant_site_settings_hours" CASCADE;
+  DROP TABLE IF EXISTS "tenant_site_settings" CASCADE;
+  DROP TABLE IF EXISTS "tenant_hero_sections" CASCADE;
+  DROP TABLE IF EXISTS "tenant_page_content_about_values" CASCADE;
+  DROP TABLE IF EXISTS "tenant_page_content" CASCADE;
+  DROP TABLE IF EXISTS "users_tenants" CASCADE;
+  DROP TABLE IF EXISTS "users_sessions" CASCADE;
+  DROP TABLE IF EXISTS "users" CASCADE;
+  DROP TABLE IF EXISTS "media" CASCADE;
+  DROP TABLE IF EXISTS "menu_categories" CASCADE;
+  DROP TABLE IF EXISTS "menu_items_dietary_flags" CASCADE;
+  DROP TABLE IF EXISTS "menu_items" CASCADE;
+  DROP TABLE IF EXISTS "gallery_images" CASCADE;
+  DROP TABLE IF EXISTS "events" CASCADE;
+  DROP TABLE IF EXISTS "payload_kv" CASCADE;
+  DROP TABLE IF EXISTS "payload_locked_documents" CASCADE;
+  DROP TABLE IF EXISTS "payload_locked_documents_rels" CASCADE;
+  DROP TABLE IF EXISTS "payload_preferences" CASCADE;
+  DROP TABLE IF EXISTS "payload_preferences_rels" CASCADE;
+  DROP TABLE IF EXISTS "payload_migrations" CASCADE;
+  DROP TYPE IF EXISTS "public"."enum_tenant_page_content_about_story_formatting_background";
+  DROP TYPE IF EXISTS "public"."enum_tenant_page_content_about_story_formatting_text_align";
+  DROP TYPE IF EXISTS "public"."enum_tenant_page_content_about_story_formatting_container_width";
+  DROP TYPE IF EXISTS "public"."enum_users_role";
+  DROP TYPE IF EXISTS "public"."enum_menu_items_dietary_flags";
+  DROP TYPE IF EXISTS "public"."enum_events_status";`)
 }
