@@ -35,13 +35,11 @@ describe('resolveSlug', () => {
     expect(result).toBeNull()
   })
 
-  it('returns null when the restaurant exists but is inactive', async () => {
+  it('passes active: true filter in the where clause', async () => {
     mockFind.mockResolvedValue({ docs: [], totalDocs: 0 })
 
-    const result = await resolveSlug('inactive-slug')
+    await resolveSlug('inactive-slug')
 
-    expect(result).toBeNull()
-    // active: false restaurants are excluded by the where clause
     expect(mockFind).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ active: { equals: true } }),

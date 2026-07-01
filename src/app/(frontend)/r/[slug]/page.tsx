@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { unstable_cache } from 'next/cache'
 import type { Metadata } from 'next'
 import { resolveSlug } from '@/server/db'
 
@@ -6,16 +7,19 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
+const getRestaurant = (slug: string) =>
+  unstable_cache(() => resolveSlug(slug), [`restaurant-${slug}`], { revalidate: 60 })()
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const restaurant = await resolveSlug(slug)
+  const restaurant = await getRestaurant(slug)
   if (!restaurant) return { title: 'Not Found' }
   return { title: restaurant.name }
 }
 
 export default async function RestaurantPage({ params }: Props) {
   const { slug } = await params
-  const restaurant = await resolveSlug(slug)
+  const restaurant = await getRestaurant(slug)
   if (!restaurant) notFound()
 
   return (

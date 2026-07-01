@@ -23,14 +23,20 @@ const getHomeData = unstable_cache(
       getPageContentForTenant(pilot.id),
       payload.find({
         collection: 'menu-items',
-        where: { and: [{ featured: { equals: true } }, { available: { equals: true } }] },
+        where: {
+          and: [
+            { restaurant: { equals: pilot.id } },
+            { featured: { equals: true } },
+            { available: { equals: true } },
+          ],
+        },
         sort: 'order',
         limit: 6,
         depth: 1,
       }),
       payload.find({
         collection: 'gallery-images',
-        where: { featured: { equals: true } },
+        where: { and: [{ restaurant: { equals: pilot.id } }, { featured: { equals: true } }] },
         sort: 'order',
         limit: 6,
         depth: 1,

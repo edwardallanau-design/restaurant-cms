@@ -25,6 +25,7 @@ const getAboutData = unstable_cache(
     const [gallery, content] = await Promise.all([
       payload.find({
         collection: 'gallery-images',
+        where: { restaurant: { equals: pilot.id } },
         sort: 'order',
         limit: 4,
         depth: 1,

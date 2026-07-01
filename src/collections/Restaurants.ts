@@ -31,7 +31,13 @@ export const Restaurants: CollectionConfig = {
       hooks: {
         beforeValidate: [
           ({ value }) =>
-            typeof value === 'string' ? value.toLowerCase().trim() : value,
+            typeof value === 'string'
+              ? value
+                  .toLowerCase()
+                  .trim()
+                  .replace(/[^a-z0-9]+/g, '-')
+                  .replace(/(^-|-$)/g, '')
+              : value,
         ],
       },
     },

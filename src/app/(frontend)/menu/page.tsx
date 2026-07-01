@@ -25,12 +25,13 @@ const getMenuData = unstable_cache(
     const [categories, items, content] = await Promise.all([
       payload.find({
         collection: 'menu-categories',
+        where: { restaurant: { equals: pilot.id } },
         sort: 'order',
         limit: 50,
       }),
       payload.find({
         collection: 'menu-items',
-        where: { available: { equals: true } },
+        where: { and: [{ restaurant: { equals: pilot.id } }, { available: { equals: true } }] },
         sort: 'order',
         limit: 300,
         depth: 1,
