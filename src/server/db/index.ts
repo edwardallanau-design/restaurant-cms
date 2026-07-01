@@ -1,0 +1,1 @@
+export { resolveSlug } from './restaurants'
