@@ -66,6 +66,10 @@ Adds authoring support for per-item choice groups (e.g. "Size": Small/Large; "Ex
 3. Export both from `src/collections/index.ts`
 4. Run `npm run generate:types` to regenerate `src/payload-types.ts`
 
+## Follow-up required in S2
+
+`MenuCategories`/`MenuItems` both carry `afterChange`/`afterDelete` hooks calling `safeRevalidateTag(CACHE_TAGS.menu)`. `Modifiers`/`ModifierOptions` deliberately omit them here (no cached read path exists yet to invalidate) — this is the one point where S1 diverges from "follow the pattern exactly." **S2 must add the same `afterChange`/`afterDelete` → `safeRevalidateTag(CACHE_TAGS.menu)` hooks to both `Modifiers` and `ModifierOptions`** before or alongside building the cached diner menu read, otherwise editing a modifier/option won't invalidate the menu cache and diners will see stale option prices/labels until the parent item is re-saved.
+
 ## Explicitly out of scope (per epic map's scope boundary)
 
 - No diner-facing read path (S2)

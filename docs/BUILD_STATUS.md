@@ -23,7 +23,7 @@ Agent-ready detail in [`docs/design/07-epic-map.md`](design/07-epic-map.md). Seq
 |---|-------|--------|------------------------|
 | S0 | Tenant foundation + slug routing (Restaurant, multi-tenant plugin, per-tenant settings, data-access choke-point) | ✅ | 10/10 Vitest tests; pilot≠decoy isolation; `/r/pilot` → stub, `/r/unknown` → 404; `355502a`→`886a3f4` |
 | S1 | Menu authoring: `Modifiers` + `ModifierOptions` collections | ✅ | Local-API smoke test: required single-select + optional multi-select created, tenant-scoped (pilot≠decoy); `246fee2` |
-| S2 | Diner menu read — `GET /api/shop/:slug/menu` (cached) | ⬜ | — |
+| S2 | Diner menu read — `GET /api/shop/:slug/menu` (cached). **Must also add `afterChange`/`afterDelete` → `safeRevalidateTag(CACHE_TAGS.menu)` hooks to `Modifiers`/`ModifierOptions` (S1 deferred these; see S1 spec's "Follow-up required in S2")** | ⬜ | — |
 | S3 | Checkout — `POST /api/shop/:slug/orders` (keystone; invariants INV-1…14) | ⬜ | — |
 | S4 | Order confirmation — `GET /api/shop/:slug/orders/:orderNumber` | ⬜ | — |
 | S5 | Staff dashboard + confirm/cancel (2s polling) | ⬜ | — |
