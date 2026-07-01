@@ -1,3 +1,7 @@
+export { Restaurants } from './Restaurants'
+export { TenantSiteSettings } from './TenantSiteSettings'
+export { TenantHeroSections } from './TenantHeroSections'
+export { TenantPageContent } from './TenantPageContent'
 export { Events } from './Events'
 export { GalleryImages } from './GalleryImages'
 export { Media } from './Media'

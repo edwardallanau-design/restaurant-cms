@@ -27,7 +27,6 @@ export const MenuItems: CollectionConfig = {
       name: 'slug',
       type: 'text',
       label: 'Slug',
-      unique: true,
       admin: {
         position: 'sidebar',
         description: 'Auto-generated from name.',
@@ -124,6 +123,12 @@ export const MenuItems: CollectionConfig = {
         position: 'sidebar',
         description: 'Lower numbers appear first within the category.',
       },
+    },
+  ],
+  indexes: [
+    {
+      fields: ['restaurant', 'slug'],
+      unique: true,
     },
   ],
   hooks: {

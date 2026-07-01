@@ -16,14 +16,17 @@
     "migrate:create": "payload migrate:create",
     "migrate": "payload migrate",
     "migrate:status": "payload migrate:status",
-    "migrate:rollback": "payload migrate:rollback"
+    "migrate:rollback": "payload migrate:rollback",
+    "seed": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx --env-file=.env.local src/scripts/seed.ts",
+    "test": "vitest"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.78.0",
-    "@payloadcms/next": "^3.78.0",
-    "@payloadcms/richtext-lexical": "^3.78.0",
-    "@payloadcms/storage-vercel-blob": "^3.78.0",
-    "@payloadcms/ui": "^3.78.0",
+    "@payloadcms/db-postgres": "^3.85.1",
+    "@payloadcms/next": "^3.85.1",
+    "@payloadcms/plugin-multi-tenant": "^3.85.1",
+    "@payloadcms/richtext-lexical": "^3.85.1",
+    "@payloadcms/storage-vercel-blob": "^3.85.1",
+    "@payloadcms/ui": "^3.85.1",
     "@react-email/components": "^1.0.8",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@tailwindcss/postcss": "^4.2.1",
@@ -33,7 +36,7 @@
     "cross-env": "^7.0.3",
     "graphql": "^16.10.0",
     "next": "15.4.11",
-    "payload": "^3.78.0",
+    "payload": "^3.85.1",
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -53,6 +56,8 @@
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5.9.2"
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.9"
   }
 }

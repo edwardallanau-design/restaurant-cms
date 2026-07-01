@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
-import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
+import { env } from '@/env'
+import { resolveSlug, getSettingsForTenant, getPageContentForTenant } from '@/server/db'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
 import { ContactForm } from '@/components/contact/ContactForm'
@@ -13,10 +14,12 @@ export const metadata: Metadata = {
 
 const getContactData = unstable_cache(
   async () => {
-    const payload = await getPayload()
+    const pilot = await resolveSlug(env.PILOT_RESTAURANT_SLUG)
+    if (!pilot) throw new Error('Pilot restaurant not found.')
+
     const [settings, content] = await Promise.all([
-      payload.findGlobal({ slug: 'site-settings', depth: 0 }),
-      payload.findGlobal({ slug: 'page-content', depth: 0 }),
+      getSettingsForTenant(pilot.id),
+      getPageContentForTenant(pilot.id),
     ])
     return { settings, content }
   },
@@ -26,7 +29,9 @@ const getContactData = unstable_cache(
 
 export default async function ContactPage() {
   const { settings, content } = await getContactData()
-  const { contact, hours, restaurantName } = settings
+  const contact = settings?.contact
+  const hours = settings?.hours
+  const restaurantName = settings?.restaurantName
 
   return (
     <>
@@ -34,10 +39,10 @@ export default async function ContactPage() {
       <div className="bg-primary-900 pt-32 pb-20 text-center text-white">
         <Container>
           <p className="mb-2 text-sm font-semibold tracking-widest text-primary-300 uppercase">
-            {content.contact?.eyebrow ?? 'Find Us'}
+            {content?.contact?.eyebrow ?? 'Find Us'}
           </p>
           <h1 className="font-serif text-4xl font-bold sm:text-5xl">
-            {content.contact?.headerTitle ?? 'Contact & Location'}
+            {content?.contact?.headerTitle ?? 'Contact & Location'}
           </h1>
         </Container>
       </div>

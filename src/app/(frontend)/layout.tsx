@@ -3,8 +3,9 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import { unstable_cache } from 'next/cache'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
+import { env } from '@/env'
+import { resolveSlug, getSettingsForTenant } from '@/server/db'
 import '../globals.css'
 
 const inter = Inter({
@@ -21,22 +22,23 @@ const playfair = Playfair_Display({
 
 const getSiteSettings = unstable_cache(
   async () => {
-    const payload = await getPayload()
-    return payload.findGlobal({ slug: 'site-settings', depth: 1 })
+    const pilot = await resolveSlug(env.PILOT_RESTAURANT_SLUG)
+    if (!pilot) throw new Error('Pilot restaurant not found. Run npm run seed.')
+    return getSettingsForTenant(pilot.id)
   },
-  ['site-settings'],
+  ['layout-site-settings'],
   { tags: [CACHE_TAGS.settings], revalidate: false },
 )
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
-  const name = settings.restaurantName ?? 'Restaurant'
+  const name = settings?.restaurantName ?? 'Restaurant'
   return {
     title: {
-      default: settings.seo?.metaTitle ?? name,
+      default: settings?.seo?.metaTitle ?? name,
       template: `%s | ${name}`,
     },
-    description: settings.seo?.metaDescription ?? undefined,
+    description: settings?.seo?.metaDescription ?? undefined,
   }
 }
 
@@ -48,19 +50,19 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       <body className="font-sans antialiased">
         <Header
           settings={{
-            restaurantName: settings.restaurantName,
-            logo: settings.logo,
-            navigation: settings.navigation,
+            restaurantName: settings?.restaurantName,
+            logo: settings?.logo,
+            navigation: settings?.navigation,
           }}
         />
         <main>{children}</main>
         <Footer
           settings={{
-            restaurantName: settings.restaurantName,
-            contact: settings.contact,
-            hours: settings.hours,
-            socialLinks: settings.socialLinks,
-            navigation: settings.navigation,
+            restaurantName: settings?.restaurantName,
+            contact: settings?.contact,
+            hours: settings?.hours,
+            socialLinks: settings?.socialLinks,
+            navigation: settings?.navigation,
           }}
         />
       </body>

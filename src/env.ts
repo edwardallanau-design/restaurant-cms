@@ -44,6 +44,11 @@ export const env = createEnv({
      * Node environment.
      */
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+
+    /**
+     * Slug of the pilot restaurant used by the marketing pages (default: pilot).
+     */
+    PILOT_RESTAURANT_SLUG: z.string().min(1).default('pilot'),
   },
 
   /**
@@ -70,6 +75,7 @@ export const env = createEnv({
     RESEND_TO_EMAIL: process.env['RESEND_TO_EMAIL'],
     REVALIDATION_SECRET: process.env['REVALIDATION_SECRET'],
     NODE_ENV: process.env['NODE_ENV'],
+    PILOT_RESTAURANT_SLUG: process.env['PILOT_RESTAURANT_SLUG'],
     NEXT_PUBLIC_SERVER_URL: process.env['NEXT_PUBLIC_SERVER_URL'],
   },
 

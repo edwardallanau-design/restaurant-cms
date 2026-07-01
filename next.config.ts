@@ -20,6 +20,29 @@ if (process.env['VERCEL_URL'] && process.env['VERCEL_URL'] !== process.env['VERC
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
+  serverExternalPackages: ['pino', 'pino-pretty', 'pino-abstract-transport'],
+  webpack(config, { isServer, webpack: wp }) {
+    if (!isServer) {
+      // @payloadcms/plugin-cloud-storage/dist/exports/utilities.js barrel-exports
+      // resolveSignedURLKey which imports payload/internal (server-only). This
+      // leaks into the browser bundle via VercelBlobClientUploadHandler and cascades
+      // into pino-pretty → sonic-boom → fs/worker_threads/node:* etc.
+      //
+      // Fix at the source: alias payload/internal to false (empty module) in browser
+      // bundles. This cuts the entire downstream chain in one step.
+      // IgnorePlugin + fallback kept as safety nets for any other node:* leaks.
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'payload/internal': false,
+      }
+      config.resolve.fallback = { ...config.resolve.fallback, worker_threads: false }
+      config.plugins = [
+        ...(config.plugins || []),
+        new wp.IgnorePlugin({ resourceRegExp: /^node:/ }),
+      ]
+    }
+    return config
+  },
   images: {
     remotePatterns,
     formats: ['image/avif', 'image/webp'],

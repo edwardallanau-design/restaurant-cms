@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
+import { env } from '@/env'
+import { resolveSlug, getPageContentForTenant } from '@/server/db'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
 import { EventCard } from '@/components/events/EventCard'
@@ -14,19 +16,26 @@ export const metadata: Metadata = {
 const getEventsData = unstable_cache(
   async () => {
     const payload = await getPayload()
+    const pilot = await resolveSlug(env.PILOT_RESTAURANT_SLUG)
+    if (!pilot) throw new Error('Pilot restaurant not found.')
     const now = new Date().toISOString()
+
     // Upcoming + published, featured first
     const [result, content] = await Promise.all([
       payload.find({
         collection: 'events',
         where: {
-          and: [{ status: { equals: 'published' } }, { date: { greater_than_equal: now } }],
+          and: [
+            { restaurant: { equals: pilot.id } },
+            { status: { equals: 'published' } },
+            { date: { greater_than_equal: now } },
+          ],
         },
         sort: ['-featured', 'date'],
         limit: 50,
         depth: 1,
       }),
-      payload.findGlobal({ slug: 'page-content', depth: 0 }),
+      getPageContentForTenant(pilot.id),
     ])
     return { events: result.docs, content }
   },
@@ -45,10 +54,10 @@ export default async function EventsPage() {
       <div className="bg-primary-900 pt-32 pb-16 text-center text-white">
         <Container>
           <p className="mb-2 text-sm font-semibold tracking-widest text-primary-300 uppercase">
-            {content.events?.eyebrow ?? "What's Coming Up"}
+            {content?.events?.eyebrow ?? "What's Coming Up"}
           </p>
           <h1 className="font-serif text-4xl font-bold sm:text-5xl">
-            {content.events?.headerTitle ?? 'Events & Specials'}
+            {content?.events?.headerTitle ?? 'Events & Specials'}
           </h1>
         </Container>
       </div>

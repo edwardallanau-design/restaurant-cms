@@ -3,6 +3,8 @@ import { unstable_cache } from 'next/cache'
 import Image from 'next/image'
 import { getPayload } from '@/lib/payload'
 import { CACHE_TAGS } from '@/lib/cache'
+import { env } from '@/env'
+import { resolveSlug, getPageContentForTenant } from '@/server/db'
 import { Container } from '@/components/custom/Container'
 import { Section } from '@/components/custom/Section'
 import { ButtonLink } from '@/components/custom/ButtonLink'
@@ -17,14 +19,18 @@ export const metadata: Metadata = {
 const getAboutData = unstable_cache(
   async () => {
     const payload = await getPayload()
+    const pilot = await resolveSlug(env.PILOT_RESTAURANT_SLUG)
+    if (!pilot) throw new Error('Pilot restaurant not found.')
+
     const [gallery, content] = await Promise.all([
       payload.find({
         collection: 'gallery-images',
+        where: { restaurant: { equals: pilot.id } },
         sort: 'order',
         limit: 4,
         depth: 1,
       }),
-      payload.findGlobal({ slug: 'page-content', depth: 0 }),
+      getPageContentForTenant(pilot.id),
     ])
     return { galleryImages: gallery.docs, content }
   },
@@ -45,7 +51,7 @@ const STORY_ALIGN: Record<string, string> = {
 
 export default async function AboutPage() {
   const { galleryImages, content } = await getAboutData()
-  const about = content.about
+  const about = content?.about
 
   type StoryFmt = {
     background?: string | null

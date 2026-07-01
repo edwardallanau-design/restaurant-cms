@@ -10,9 +10,9 @@
 
 ## Current status
 
-> **MVP epic "Pilot ordering loop" — ⬜ not started.** Foundation design complete (Artifacts 1–7).
-> A Payload CMS + single-restaurant menu/marketing site already exists; the **multi-tenant ordering
-> domain is greenfield**, and the singleton globals must become per-tenant (see S0).
+> **MVP epic "Pilot ordering loop" — 🔄 S1 next.** S0 complete: multi-tenant foundation, data-access
+> choke-point, and `/r/[slug]` slug routing. 10 Vitest tests green; pilot/decoy isolation proven.
+> Payload upgraded 3.78→3.85.1 (required for `plugin-multi-tenant`).
 
 ## MVP epic — stories
 
@@ -20,7 +20,7 @@ Agent-ready detail in [`docs/design/07-epic-map.md`](design/07-epic-map.md). Seq
 
 | # | Story | Status | Proof (test / commit) |
 |---|-------|--------|------------------------|
-| S0 | Tenant foundation + slug routing (Restaurant, multi-tenant plugin, per-tenant settings, data-access choke-point) | ⬜ | — |
+| S0 | Tenant foundation + slug routing (Restaurant, multi-tenant plugin, per-tenant settings, data-access choke-point) | ✅ | 10/10 Vitest tests; pilot≠decoy isolation; `/r/pilot` → stub, `/r/unknown` → 404; `355502a`→`886a3f4` |
 | S1 | Menu authoring: `Modifiers` + `ModifierOptions` collections | ⬜ | — |
 | S2 | Diner menu read — `GET /api/shop/:slug/menu` (cached) | ⬜ | — |
 | S3 | Checkout — `POST /api/shop/:slug/orders` (keystone; invariants INV-1…14) | ⬜ | — |
