@@ -63,6 +63,16 @@ export const MenuCategories: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'active',
+      type: 'checkbox',
+      label: 'Active',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Uncheck to hide this category from the menu without deleting it.',
+      },
+    },
   ],
   indexes: [
     {

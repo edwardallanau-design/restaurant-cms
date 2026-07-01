@@ -58,7 +58,7 @@ Parts of this (`server/`, `api/shop`, the `Restaurant`/`Modifiers`/`Orders` coll
 - **One vertical slice at a time** (API → service → domain → persistence → response). Never a horizontal layer alone.
 - **Tests are the contract.** Each slice gets at least one test (the story's ACs). Implement until green.
 - **Commit at every green state.** Small, working commits.
-- **Update `docs/BUILD_STATUS.md`** when a story lands.
+- **Update `docs/BUILD_STATUS.md`** when a story lands. Also update `docs/IMPROVEMENTS.md` (deferred gaps/tech debt a review surfaced), `docs/DESIGN_DIVERGENCES.md` (a conscious deviation from `docs/design/`), and `docs/ISSUES.md` (a bug found + how it was fixed) — same commit, same discipline as BUILD_STATUS.
 
 ## Context-package index (load per story)
 Intent & constraints (build mode) → `docs/design/01-intent-and-constraints.md` · Domain model → `02-domain-model.md` · Tenancy → `03-tenancy-model.md` · Architecture/ADRs → `04-architecture.md` · API conventions → `docs/design/05-api-conventions.md` · Engineering **principles** (universal) → `docs/design/06a-engineering-principles.md` · Engineering **decisions** (this system) → `docs/design/06b-engineering-decisions.md` · Epic map/stories → `07-epic-map.md`
@@ -70,3 +70,10 @@ Anything irreversible or one-way: touching the tenancy model / data-access choke
 
 ## Build status & orientation
 Live tracker: `docs/BUILD_STATUS.md` (MVP epic "Pilot ordering loop"; start at S0). On session start: (1) read BUILD_STATUS, (2) verify against the actual repo — code is the real source of truth, (3) skim recent `git log`. If the tracker and code disagree, trust the code and flag the mismatch.
+
+**Companion trackers — check these too, not just BUILD_STATUS:**
+- `docs/IMPROVEMENTS.md` — deferred gaps/tech debt (things a review flagged as not-blocking-but-worth-fixing later). Check before assuming a clean slate; don't silently re-introduce a gap already logged here.
+- `docs/DESIGN_DIVERGENCES.md` — points where the code consciously chose differently from, or filled a gap left by, `docs/design/`. Check this before assuming code-vs-design mismatches are bugs — they may be logged, deliberate decisions.
+- `docs/ISSUES.md` — bugs found during development and how they were fixed. Check before re-implementing something similar, so a fixed bug's root cause isn't reintroduced.
+
+All three are maintained the same way as BUILD_STATUS: updated when relevant, committed alongside the code that surfaced or fixed the item.

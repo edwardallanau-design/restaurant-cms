@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { safeRevalidateTag } from '../lib/revalidate.ts'
+import { CACHE_TAGS } from '../lib/cache.ts'
 
 export const ModifierOptions: CollectionConfig = {
   slug: 'modifier-options',
@@ -57,4 +59,16 @@ export const ModifierOptions: CollectionConfig = {
       fields: ['restaurant', 'modifier'],
     },
   ],
+  hooks: {
+    afterChange: [
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.menu)
+      },
+    ],
+    afterDelete: [
+      async () => {
+        await safeRevalidateTag(CACHE_TAGS.menu)
+      },
+    ],
+  },
 }
