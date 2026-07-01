@@ -54,7 +54,7 @@ export async function getMenuItemsForValidation(
   menuItemIds: number[],
 ): Promise<MenuItemValidationView[]>
 ```
-Tenant-scoped fetch of *only* the referenced MenuItems + their Modifiers + ModifierOptions — **including inactive rows** (checkout must see `active: false` to reject with `ITEM_INACTIVE`/`OPTION_INACTIVE`; the S2 read path filters inactive out entirely, so it can't be reused here). Same 3-query-and-assemble pattern as `getMenuForTenant` in `menu.ts`, but scoped by `id: { in: menuItemIds }` on the top query instead of pulling the whole tenant menu.
+Tenant-scoped fetch of *only* the referenced MenuItems + their Modifiers + ModifierOptions — **items and options include inactive rows** (checkout must see `active: false`/`available: false` to reject with `ITEM_INACTIVE`/`OPTION_INACTIVE`; the S2 read path filters inactive out entirely, so it can't be reused here). **Modifiers, by contrast, are fetched active-only**: an inactive modifier is hidden from the menu (S2), so checkout treats it as not belonging to the item — a selection referencing it fails `INVALID_MODIFIER_SELECTION`, and an inactive *required* modifier no longer blocks the item from being ordered (otherwise soft-deleting a required modifier would make its item permanently unorderable while looking fine on the menu). Same 3-query-and-assemble pattern as `getMenuForTenant` in `menu.ts`, but scoped by `id: { in: menuItemIds }` on the top query instead of pulling the whole tenant menu.
 
 ```ts
 export async function createOrderForTenant(
