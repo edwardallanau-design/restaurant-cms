@@ -52,7 +52,7 @@ export default async function RestaurantPage({ params }: Props) {
                       {modifier.options
                         .map((option) =>
                           option.priceAdjustment
-                            ? `${option.label} (+$${option.priceAdjustment.toFixed(2)})`
+                            ? `${option.label} (${option.priceAdjustment > 0 ? '+' : '-'}$${Math.abs(option.priceAdjustment).toFixed(2)})`
                             : option.label,
                         )
                         .join(', ')}
