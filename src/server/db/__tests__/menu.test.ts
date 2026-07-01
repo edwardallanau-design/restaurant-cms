@@ -27,6 +27,7 @@ describe('getMenuForTenant', () => {
     expect(mockFind).toHaveBeenCalledWith({
       collection: 'menu-items',
       where: { restaurant: { equals: PILOT_ID }, available: { equals: true } },
+      sort: 'order',
       limit: 0,
     })
     expect(mockFind).toHaveBeenCalledWith({

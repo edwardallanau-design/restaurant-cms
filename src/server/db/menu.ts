@@ -43,6 +43,7 @@ export async function getMenuForTenant(restaurantId: number): Promise<MenuCatego
     payload.find({
       collection: 'menu-items',
       where: { restaurant: { equals: restaurantId }, available: { equals: true } },
+      sort: 'order',
       limit: 0,
     }),
     payload.find({
