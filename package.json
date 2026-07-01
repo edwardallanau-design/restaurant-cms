@@ -16,7 +16,9 @@
     "migrate:create": "payload migrate:create",
     "migrate": "payload migrate",
     "migrate:status": "payload migrate:status",
-    "migrate:rollback": "payload migrate:rollback"
+    "migrate:rollback": "payload migrate:rollback",
+    "seed": "cross-env NODE_ENV=production PAYLOAD_CONFIG_PATH=src/payload.config.ts tsx --env-file=.env.local src/scripts/seed.ts",
+    "test": "vitest"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.85.1",
