@@ -2,6 +2,7 @@
 
 **Design (source of truth):** [`docs/design/`](design/README.md) — multi-tenant, Payload-based (Artifacts 1–7).
 **Standing rules:** [`CLAUDE.md`](../CLAUDE.md)
+**Companion trackers, maintained the same way as this file:** [`IMPROVEMENTS.md`](IMPROVEMENTS.md) (deferred gaps/tech debt) · [`DESIGN_DIVERGENCES.md`](DESIGN_DIVERGENCES.md) (where we consciously chose differently from `docs/design/`) · [`ISSUES.md`](ISSUES.md) (bugs found + how they were fixed)
 
 > **Supersedes** the 2026-06-29 single-tenant / Prisma phase plan. That plan and its design spec are
 > archived under [`docs/superpowers/`](superpowers/) marked SUPERSEDED — **do not build from them.**
@@ -44,4 +45,4 @@ Ordered by irreversibility × likelihood (playbook §6): **E10 first**, then the
 ## How to use this document
 
 **Session start:** read Current status, the MVP epic in [`docs/design/07-epic-map.md`](design/07-epic-map.md), and the relevant context-package docs in [`docs/design/`](design/README.md).
-**Session end:** update each touched story's Status + Proof, then commit this file alongside the code.
+**Session end:** update each touched story's Status + Proof, then commit this file alongside the code. Also update [`IMPROVEMENTS.md`](IMPROVEMENTS.md), [`DESIGN_DIVERGENCES.md`](DESIGN_DIVERGENCES.md), and [`ISSUES.md`](ISSUES.md) if the story surfaced a deferred gap, a conscious spec divergence, or a bug — same commit, same discipline.
