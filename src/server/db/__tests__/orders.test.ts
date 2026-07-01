@@ -25,7 +25,7 @@ describe('getMenuItemsForValidation', () => {
     })
     expect(mockFind).toHaveBeenCalledWith({
       collection: 'modifiers',
-      where: { restaurant: { equals: PILOT_ID }, menuItem: { in: [10, 11] } },
+      where: { restaurant: { equals: PILOT_ID }, menuItem: { in: [10, 11] }, active: { equals: true } },
       limit: 0,
     })
     expect(mockFind).toHaveBeenCalledWith({

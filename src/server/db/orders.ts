@@ -38,7 +38,12 @@ export async function getMenuItemsForValidation(
     }),
     payload.find({
       collection: 'modifiers',
-      where: { restaurant: { equals: restaurantId }, menuItem: { in: menuItemIds } },
+      // Active-only: an inactive modifier is hidden from the menu read (S2), so checkout
+      // treats it as not belonging to the item at all — selections referencing it fail
+      // INVALID_MODIFIER_SELECTION, and an inactive *required* modifier no longer blocks
+      // the item from being ordered. Items/options stay unfiltered because they carry
+      // their own specific rejection codes (ITEM_INACTIVE / OPTION_INACTIVE).
+      where: { restaurant: { equals: restaurantId }, menuItem: { in: menuItemIds }, active: { equals: true } },
       limit: 0,
     }),
     payload.find({
