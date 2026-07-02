@@ -38,7 +38,9 @@ Order is the aggregate root; OrderItem is **not** a separate Payload collection 
 
 Tenant field (`restaurant`) is injected automatically by `plugin-multi-tenant`, same as every other tenant-owned collection — no manual field needed (confirmed: `MenuItems.ts` doesn't declare it either).
 
-`access`: `read`/`update`/`delete` gated on `Boolean(user)` (staff/admin only — matches `MenuItems.ts` pattern); `create: () => true` (anonymous diners create orders through the Local API call in `createOrderForTenant`, same trust model as the rest of the diner-facing write path — tenant scoping is enforced by the service passing the locked `restaurantId`, not by Payload access control). No `overrideAccess` needed — this mirrors how `resolveSlug`/`getMenuForTenant` already rely on permissive `read` rules rather than bypassing access control.
+`access`: ALL of `read`/`create`/`update`/`delete` gated on `Boolean(user)` (staff/admin only). The diner checkout path is unaffected because it creates via the **Local API** (`payload.create` in `createOrderForTenant`), which defaults to `overrideAccess: true` — Payload access rules govern only the public REST/GraphQL surface. *(Amended 2026-07-02 after final review: the original spec said `create: () => true` on the incorrect premise that the Local API needed a permissive rule. It doesn't — and the permissive rule exposed Payload's public `POST /api/orders` REST endpoint to arbitrary anonymous order creation, bypassing INV-1/2/6/7.)*
+
+`orderNumber` uniqueness is **per-tenant** — a composite unique index on `(restaurant, orderNumber)`, alongside the `(restaurant, sequenceNumber)` one. *(Amended 2026-07-02: the original field-level `unique: true` was a global index; every café produces `ORD-0001`, so tenant #2's first order would collide and permanently brick their checkout.)*
 
 No `afterChange` cache-invalidation hook — Orders aren't cached (S4/S5 read them fresh; INV-3 means the order side is intentionally *not* the cacheable side, per `02-domain-model.md`'s "the seam").
 
@@ -63,11 +65,10 @@ export async function createOrderForTenant(
 ): Promise<{ orderNumber: string; totalPrice: number; status: string; createdAt: string }>
 ```
 The transactional write (INV-6). Using Payload's Local API transaction support:
-1. `const transactionID = await payload.db.beginTransaction()`
-2. `payload.findByID({ collection: 'restaurants', id: restaurantId, req: { transactionID } })` — Postgres row-locks the Restaurant row for the duration of the transaction (Payload's Postgres adapter uses `SELECT ... FOR UPDATE` semantics under an open transaction for a lookup-then-write on the same row).
-3. Increment `lastOrderSequence` via `payload.update(..., { req: { transactionID } })`, read back the new value as `sequenceNumber`.
-4. `payload.create({ collection: 'orders', data: { sequenceNumber, orderNumber: 'ORD-' + pad(sequenceNumber), status: 'PENDING', totalPrice, items }, req: { transactionID }, overrideAccess: true })`.
-5. `commitTransaction`; any thrown error → `rollbackTransaction` then rethrow.
+1. `const transactionID = await payload.db.beginTransaction()` (null-guarded — a transaction-incapable adapter can't uphold INV-6).
+2. **Atomic increment** of `lastOrderSequence` on the transaction-scoped drizzle session (`payload.db.sessions[transactionID].db`): `UPDATE restaurants SET last_order_sequence = last_order_sequence + 1 WHERE id = … RETURNING last_order_sequence` via the drizzle builder against `payload.db.tables.restaurants`. The `UPDATE` itself takes the row lock, so concurrent checkouts for one café serialize and each receives a distinct value. *(Amended 2026-07-02 after final review: the original spec claimed Payload's `findByID` inside a transaction acquires `SELECT ... FOR UPDATE` — verified false; no adapter code issues `FOR UPDATE`. A read-then-update was racy: concurrent losers hit the composite unique index and 500'd.)*
+3. `payload.create({ collection: 'orders', data: { restaurant: restaurantId, sequenceNumber, orderNumber: 'ORD-' + pad(sequenceNumber), status: 'PENDING', totalPrice, items }, req: { transactionID } })` — `restaurant` set explicitly (the plugin injects the field; an anonymous Local API create must supply the value).
+4. `commitTransaction`; any thrown error → `killTransaction` then rethrow.
 
 Different tenants never contend for the same lock (row-scoped), so concurrent checkouts across cafés don't serialize against each other — only concurrent checkouts *within* the same café do, which is exactly the INV-6 requirement.
 
