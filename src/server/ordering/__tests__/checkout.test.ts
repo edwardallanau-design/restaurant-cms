@@ -119,6 +119,40 @@ describe('checkout', () => {
     await expect(checkout('pilot', cart)).rejects.toMatchObject({ code: 'INVALID_MODIFIER_SELECTION' })
   })
 
+  it('throws INVALID_MODIFIER_SELECTION when the same modifierId appears twice on one line (INV-9 bypass)', async () => {
+    // Two selections for the same single-select modifier, one option each, would otherwise
+    // sneak two options past the single-select cardinality check since neither selection
+    // alone has 2+ options.
+    const cart = {
+      items: [
+        {
+          menuItemId: 10,
+          quantity: 1,
+          selectedModifiers: [
+            { modifierId: 101, optionIds: [201] },
+            { modifierId: 101, optionIds: [202] },
+          ],
+        },
+      ],
+    }
+
+    await expect(checkout('pilot', cart)).rejects.toMatchObject({ code: 'INVALID_MODIFIER_SELECTION' })
+  })
+
+  it('throws INVALID_MODIFIER_SELECTION when the same optionId appears twice in one selection', async () => {
+    const cart = {
+      items: [
+        {
+          menuItemId: 10,
+          quantity: 1,
+          selectedModifiers: [{ modifierId: 102, optionIds: [204, 204] }],
+        },
+      ],
+    }
+
+    await expect(checkout('pilot', cart)).rejects.toMatchObject({ code: 'INVALID_MODIFIER_SELECTION' })
+  })
+
   it('throws OPTION_INACTIVE when a selected option is inactive', async () => {
     mockGetMenuItemsForValidation.mockResolvedValue([
       {

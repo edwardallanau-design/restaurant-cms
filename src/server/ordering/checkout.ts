@@ -1,16 +1,9 @@
 import { resolveSlug, getMenuItemsForValidation, createOrderForTenant } from '@/server/db'
-import type { ValidationModifierView } from '@/server/db'
+import type { ValidationModifierView, CreateOrderResult } from '@/server/db'
 import { DomainError } from './errors'
 import type { Cart } from './checkout.schema'
 
-interface CheckoutResult {
-  orderNumber: string
-  totalPrice: number
-  status: string
-  createdAt: string
-}
-
-export async function checkout(slug: string, cart: Cart): Promise<CheckoutResult | null> {
+export async function checkout(slug: string, cart: Cart): Promise<CreateOrderResult | null> {
   const restaurant = await resolveSlug(slug)
   if (!restaurant) return null
 
@@ -30,6 +23,32 @@ export async function checkout(slug: string, cart: Cart): Promise<CheckoutResult
     }
 
     const modifiersById = new Map<number, ValidationModifierView>(menuItem.modifiers.map((m) => [m.id, m]))
+
+    // Integrity checks (same family as "belongs to" below): a duplicate modifierId lets two
+    // selections target the same single-select modifier, each with one option, sneaking two
+    // options past the single-select cardinality check (INV-9) since neither selection alone
+    // has 2+ options. A duplicate optionId within one selection would price that option twice.
+    const seenModifierIds = new Set<number>()
+    for (const selection of line.selectedModifiers) {
+      if (seenModifierIds.has(selection.modifierId)) {
+        throw new DomainError(
+          'INVALID_MODIFIER_SELECTION',
+          `Modifier ${selection.modifierId} is selected more than once for item ${line.menuItemId}.`,
+        )
+      }
+      seenModifierIds.add(selection.modifierId)
+
+      const seenOptionIds = new Set<number>()
+      for (const optionId of selection.optionIds) {
+        if (seenOptionIds.has(optionId)) {
+          throw new DomainError(
+            'INVALID_MODIFIER_SELECTION',
+            `Option ${optionId} is selected more than once for modifier ${selection.modifierId}.`,
+          )
+        }
+        seenOptionIds.add(optionId)
+      }
+    }
 
     const resolvedSelections = line.selectedModifiers.map((selection) => {
       const modifier = modifiersById.get(selection.modifierId)
@@ -84,7 +103,9 @@ export async function checkout(slug: string, cart: Cart): Promise<CheckoutResult
       (sum, sel) => sum + sel.options.reduce((s, o) => s + o.priceAdjustment, 0),
       0,
     )
-    const lineTotal = (menuItem.price + modifierAdjustmentTotal) * line.quantity
+    // Round at the pricing boundary (first place multiplication happens) to guard against
+    // float drift (e.g. 4.2 + 0.1 !== 4.3 in IEEE 754).
+    const lineTotal = Math.round((menuItem.price + modifierAdjustmentTotal) * line.quantity * 100) / 100
 
     return {
       menuItem: menuItem.id,
@@ -101,7 +122,7 @@ export async function checkout(slug: string, cart: Cart): Promise<CheckoutResult
     }
   })
 
-  const totalPrice = pricedItems.reduce((sum, item) => sum + item.lineTotal, 0)
+  const totalPrice = Math.round(pricedItems.reduce((sum, item) => sum + item.lineTotal, 0) * 100) / 100
   const items = pricedItems.map(({ lineTotal: _lineTotal, ...item }) => item)
 
   return createOrderForTenant(restaurant.id, items, totalPrice)
