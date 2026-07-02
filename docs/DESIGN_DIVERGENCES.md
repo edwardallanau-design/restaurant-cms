@@ -72,6 +72,28 @@ rather than silently skipped.
 
 ---
 
+## D4 — Inactive-modifier semantics at checkout (gap-fill of INV-8)
+
+**Design said:** [`02-domain-model.md`](design/02-domain-model.md) INV-8 mandates re-validating items
+and selected options against the live menu at checkout, but is silent on inactive *modifiers* —
+there is no `MODIFIER_INACTIVE` error code in [`05-api-conventions.md`](design/05-api-conventions.md).
+
+**We did:** an inactive modifier is treated as not belonging to the item — filtered from the
+checkout validation view at the db layer. A cart referencing an inactive modifier fails the
+`INVALID_MODIFIER_SELECTION` check ("selection doesn't belong to this item"), and an inactive
+required modifier no longer blocks its item.
+
+**Why:** INV-8's wording ("[re-validate against the live menu]") is consistent with treating soft
+deletes as visibility toggles (the diner never sees the inactive modifier in S2's menu read). An
+inactive required modifier posed a concrete risk (see [`ISSUES.md`](ISSUES.md) BUG-4) — every order
+would fail validation. Chose the consistent path (filter at the db layer, just like S2 does)
+rather than adding a new `MODIFIER_INACTIVE` error code or leaving it unspecified. This gap-fill
+was decided explicitly and not silent.
+
+**Story:** S3. **Spec:** [`docs/superpowers/specs/2026-07-02-s3-checkout-design.md`](superpowers/specs/2026-07-02-s3-checkout-design.md) Part 2.
+
+---
+
 ## How to use this document
 
 Log a divergence when: the design docs said X and the code does Y, or the design left something

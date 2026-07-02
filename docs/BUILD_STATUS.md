@@ -11,12 +11,13 @@
 
 ## Current status
 
-> **MVP epic "Pilot ordering loop" — 🔄 S3 next.** S0 complete: multi-tenant foundation, data-access
+> **MVP epic "Pilot ordering loop" — 🔄 S4 next.** S0 complete: multi-tenant foundation, data-access
 > choke-point, and `/r/[slug]` slug routing. 10 Vitest tests green; pilot/decoy isolation proven.
 > Payload upgraded 3.78→3.85.1 (required for `plugin-multi-tenant`). S1 complete: `Modifiers` +
 > `ModifierOptions` collections added, tenant-scoped, attached to `MenuItems`. S2 complete: diner menu read
 > (`GET /api/shop/:slug/menu`, cached with `afterChange`/`afterDelete` hooks on `Modifiers`/`ModifierOptions`),
-> `/r/:slug` renders menu tree from data access layer.
+> `/r/:slug` renders menu tree from data access layer. S3 complete: checkout endpoint with server-side pricing
+> + validation (INV-1…14), `Orders` collection with items as array field, per-café transactional sequence numbering.
 
 ## MVP epic — stories
 
@@ -27,7 +28,7 @@ Agent-ready detail in [`docs/design/07-epic-map.md`](design/07-epic-map.md). Seq
 | S0 | Tenant foundation + slug routing (Restaurant, multi-tenant plugin, per-tenant settings, data-access choke-point) | ✅ | 10/10 Vitest tests; pilot≠decoy isolation; `/r/pilot` → stub, `/r/unknown` → 404; `355502a`→`886a3f4` |
 | S1 | Menu authoring: `Modifiers` + `ModifierOptions` collections | ✅ | Local-API smoke test: required single-select + optional multi-select created, tenant-scoped (pilot≠decoy); `246fee2` |
 | S2 | Diner menu read — `GET /api/shop/:slug/menu` (cached); `Modifiers`/`ModifierOptions` cache hooks added; `/r/:slug` renders the tree | ✅ | Vitest: `getMenuForTenant` (tenant isolation + tree assembly), `getMenu` service, route handler (200/`200 []`/404); `9b99463` |
-| S3 | Checkout — `POST /api/shop/:slug/orders` (keystone; invariants INV-1…14) | ⬜ | — |
+| S3 | Checkout — `POST /api/shop/:slug/orders` (keystone; invariants INV-1…14) | ✅ | Vitest: `getMenuItemsForValidation` + `createOrderForTenant` (tenant isolation + sequence), `checkout` service (all 6 DomainError codes + pricing + fail-fast order), route handler (201/400/404/422); `419a735` |
 | S4 | Order confirmation — `GET /api/shop/:slug/orders/:orderNumber` | ⬜ | — |
 | S5 | Staff dashboard + confirm/cancel (2s polling) | ⬜ | — |
 | S6 | Deploy pilot end-to-end (Vercel/Neon, seed real menu, table QR) | ⬜ | — |

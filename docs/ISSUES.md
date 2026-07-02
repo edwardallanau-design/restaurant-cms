@@ -82,6 +82,35 @@ confirmed the diner page and `/api/shop/:slug/menu` route agree on item order).
 
 ---
 
+## BUG-4 — Soft-deleted required modifier would have bricked its item at checkout
+
+**Found:** S3, Task 2 review escalation (before the service was built), 2026-07-02.
+
+**What happened:** the original S3 plan fetched ALL modifiers (active + inactive) into the
+checkout validation view; the service's required-modifier check would then demand a selection for
+a soft-deleted required modifier that the S2 menu read hides from diners. Result: every order for
+that item would fail `REQUIRED_MODIFIER_MISSING` at checkout, even though no diner ever saw the
+option to select it.
+
+**Why it mattered:** a silent failure mode — an author accidentally sets a modifier
+`active: false` in the admin panel, and that restaurant's entire item becomes impossible to order.
+No diner-facing error message, no indication in the menu; just all orders rejected. A soft-delete
+at that layer is meant to be temporary (e.g. "out of stock"), not a way to "remove" something
+permanently.
+
+**Fix:** `getMenuItemsForValidation` now fetches active modifiers only (matching the S2 menu read's
+filtering), using the same data-access layer filter. A selection referencing an inactive modifier
+now fails `INVALID_MODIFIER_SELECTION` (doesn't belong to the validation view), and required-checks
+skip it because the modifier is not present in the view. Covered by a dedicated checkout-service
+test exercising a required modifier marked inactive.
+
+**Commits:** `8bef485` (fix: fetch active modifiers only in checkout validation view (S3 review)) ·
+`5bee5e3` (test: cover inactive required modifier at checkout (S3 review)).
+
+**Status:** ✅ fixed.
+
+---
+
 ## How to use this document
 
 Log an entry when a review, test failure, or manual check reveals something that was actually
