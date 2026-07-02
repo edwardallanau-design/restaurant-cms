@@ -36,6 +36,13 @@ Status key: 🔴 open · 🟡 in progress · ✅ resolved
 | I14 | Non-`DomainError` exceptions on `/api/shop` routes (e.g. an unexpected DB error) fall through to Next's default 500 body rather than the API conventions' generic error envelope — consistent with S2's menu route, but not yet unified into one error-boundary helper. | S3 final review, 2026-07-02 | 🔴 open |
 | I15 | The atomic per-café sequence increment (`createOrderForTenant` in `src/server/db/orders.ts`) reads `payload.db.sessions[transactionID]`/`payload.db.tables.restaurants` directly, since `@payloadcms/drizzle`'s typed `DrizzleAdapter` and its `getTransaction()` helper are not part of that package's public export map (only `.`, `./postgres`, `./sqlite`, `./types` are exported) — this couples the implementation to adapter internals that could shift in a future `@payloadcms/db-postgres` upgrade without a semver-visible break. Worth an S6 integration test that fires two real concurrent checkout requests against a live Postgres instance to confirm the row-level serialization holds in practice (unit tests here only exercise the mocked builder chain). | S3 final review, 2026-07-02 | 🔴 open |
 
+## Product / UX direction
+
+| # | Item | Surfaced | Status |
+|---|------|----------|--------|
+| I16 | **Diner ordering menu should be the website's menu page, not a separate render.** The marketing site already has a designed menu page (`src/app/(frontend)/menu/page.tsx`); the diner ordering surface at `/r/[slug]` (currently the S2 stub markup) should reuse that same presentation with add-to-order buttons layered on — one menu presentation across the site, not two divergent ones. Applies when the diner cart/ordering UI story lands (S6 polish or its own slice). | User direction after S3 smoke test, 2026-07-02 | 🔴 open |
+| I17 | **Café-facing order dashboard should be custom, not the Payload admin.** Payload's admin isn't interactive enough for a live ordering workflow. S5's pending-orders board is already planned as a custom authed page, but this note goes further: order history/management for café staff should also live in a custom dashboard (Payload admin remains for menu authoring + platform ops). This revises the epic-map note (`docs/design/07-epic-map.md`) that "the café gets history/visibility free in the admin" — free, but not good enough as the primary staff tool. Shapes S5's scope and backlog E8. | User direction after S3 smoke test, 2026-07-02 | 🔴 open |
+
 ---
 
 ## How to use this document
