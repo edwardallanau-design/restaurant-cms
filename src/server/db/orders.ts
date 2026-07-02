@@ -1,5 +1,6 @@
 import { getPayload } from '@/lib/payload'
 import { commitTransaction, killTransaction } from 'payload'
+import { sql } from '@payloadcms/db-postgres'
 import type { MenuItem, Modifier, ModifierOption, Order } from '@/payload-types'
 
 export interface ValidationOptionView {
@@ -105,6 +106,25 @@ export interface CreateOrderResult {
   createdAt: string
 }
 
+// Narrow structural view of the drizzle-backed adapter's transaction-session and table
+// registries. Not part of Payload's public `BaseDatabaseAdapter` type (only `sessions` is,
+// typed as `db: unknown`) nor of `@payloadcms/drizzle`'s public export map (its `DrizzleAdapter`
+// type and `getTransaction` helper live at internal subpaths outside `exports` in that
+// package's package.json) — but `sessions` and `tables` are plain runtime properties set by
+// `postgresAdapter()` (see node_modules/@payloadcms/db-postgres/dist/index.js), so reading them
+// off `payload.db` at runtime is safe; this type only documents the shape we rely on.
+interface DrizzleUpdateBuilder {
+  set: (values: Record<string, unknown>) => {
+    where: (condition: unknown) => {
+      returning: (columns: Record<string, unknown>) => Promise<Array<Record<string, unknown>>>
+    }
+  }
+}
+interface TransactionScopedAdapter {
+  sessions: Record<string, { db: { update: (table: unknown) => DrizzleUpdateBuilder } } | undefined>
+  tables: Record<string, { id: unknown; lastOrderSequence: unknown } | undefined>
+}
+
 export async function createOrderForTenant(
   restaurantId: number,
   items: PricedOrderItem[],
@@ -123,21 +143,34 @@ export async function createOrderForTenant(
   const req = { payload, transactionID }
 
   try {
-    const restaurant = await payload.findByID({
-      collection: 'restaurants',
-      id: restaurantId,
-      req: { transactionID },
-    })
+    // Atomic per-café sequence increment (INV-6). A plain findByID + update has no row lock
+    // under @payloadcms/db-postgres (verified: it issues a plain SELECT, no FOR UPDATE), so two
+    // concurrent checkouts for one café could read the same counter and race. Doing the
+    // increment as a single `UPDATE ... SET x = x + 1 ... RETURNING x` on the transaction's own
+    // drizzle session makes Postgres itself serialize concurrent updates to the same row — the
+    // second transaction blocks until the first commits/rolls back, then sees the incremented
+    // value. No application-level lock or retry loop needed.
+    const adapter = payload.db as unknown as TransactionScopedAdapter
+    const session = adapter.sessions[transactionID]
+    if (!session) {
+      throw new Error(`createOrderForTenant: no transaction session found for id ${transactionID}`)
+    }
+    const restaurantsTable = adapter.tables.restaurants
+    if (!restaurantsTable) {
+      throw new Error("createOrderForTenant: adapter.tables.restaurants is not registered")
+    }
 
-    const sequenceNumber = (restaurant.lastOrderSequence ?? 0) + 1
+    const [updatedRestaurant] = await session.db
+      .update(restaurantsTable)
+      .set({ lastOrderSequence: sql`${restaurantsTable.lastOrderSequence} + 1` })
+      .where(sql`${restaurantsTable.id} = ${restaurantId}`)
+      .returning({ lastOrderSequence: restaurantsTable.lastOrderSequence })
 
-    await payload.update({
-      collection: 'restaurants',
-      id: restaurantId,
-      data: { lastOrderSequence: sequenceNumber },
-      req: { transactionID },
-    })
+    if (!updatedRestaurant) {
+      throw new Error(`createOrderForTenant: restaurant ${restaurantId} not found for sequence increment`)
+    }
 
+    const sequenceNumber = updatedRestaurant.lastOrderSequence as number
     const orderNumber = `ORD-${String(sequenceNumber).padStart(4, '0')}`
 
     const order = await payload.create({
