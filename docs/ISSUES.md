@@ -111,6 +111,80 @@ test exercising a required modifier marked inactive.
 
 ---
 
+## BUG-5 — Public REST `create` on `Orders` bypassed every checkout invariant
+
+**Found:** S3, final whole-branch review, 2026-07-02.
+
+**What happened:** `Orders.access.create` was `() => true`. Payload's REST API is publicly mounted
+(`POST /api/orders`), so anyone could create an arbitrary order directly — a fake `totalPrice`,
+`status`, or `restaurant`, or pre-inserting a future `(restaurant, sequenceNumber)`/`orderNumber` to
+collide with and brick a café's next real checkout. None of the checkout service's pricing,
+modifier-selection, or snapshot invariants (INV-1/2/3/9) apply to a direct REST create — they only
+run inside `src/server/ordering/checkout.ts`.
+
+**Why it mattered:** the collection's own access control was the only thing standing between the
+public internet and a bypass of the entire checkout invariant surface.
+
+**Fix:** `create` now requires an authenticated user (`({ req: { user } }) => Boolean(user)`). The
+diner checkout path is unaffected — it creates orders via the Local API
+(`payload.create` in `src/server/db/orders.ts`), which defaults to `overrideAccess: true` (verified
+in `node_modules/payload/dist/collections/operations/local/create.js`), so it never goes through
+this REST-facing access check.
+
+**Commit:** `1ef9a4b` — "fix: gate Orders REST create, per-tenant orderNumber uniqueness, read-only
+snapshot fields (S3 final review)"
+
+**Status:** ✅ fixed.
+
+---
+
+## BUG-6 — Global-unique `orderNumber` would collide across tenants at tenant #2's first order
+
+**Found:** S3, final whole-branch review, 2026-07-02.
+
+**What happened:** `orderNumber` had `unique: true` as a plain field-level constraint, which Payload
+enforces as a global index — but order numbers are a **per-café** sequence (INV-6): every
+restaurant's first order is `ORD-0001`. The second tenant onboarded would fail to create their first
+order because `ORD-0001` already existed for tenant #1.
+
+**Fix:** removed the field-level `unique: true` and added a composite `['restaurant', 'orderNumber']`
+unique index alongside the existing `['restaurant', 'sequenceNumber']` one, scoping uniqueness to
+each restaurant.
+
+**Commit:** `1ef9a4b` — "fix: gate Orders REST create, per-tenant orderNumber uniqueness, read-only
+snapshot fields (S3 final review)"
+
+**Status:** ✅ fixed.
+
+---
+
+## BUG-7 — Duplicate `modifierId` per cart line bypassed single-select cardinality (INV-9)
+
+**Found:** S3, final whole-branch review, 2026-07-02.
+
+**What happened:** the checkout service validated each `selectedModifiers` entry independently, but
+never checked for duplicate `modifierId`s across entries within one cart line. A cart line like
+`[{modifierId:101,optionIds:[201]},{modifierId:101,optionIds:[202]}]` — two separate selections for
+the same single-select modifier, one option each — passed the single-select check (`resolvedOptions
+.length > 1`) on *each* selection individually, sneaking two options past a modifier that should only
+allow one. Separately, a duplicate `optionId` within one selection's `optionIds` (e.g. `[204, 204]`)
+priced the same option adjustment twice.
+
+**Why it mattered:** a direct bypass of INV-9 (single-select cardinality) via the API shape rather
+than the menu UI, and a pricing bug that could double-charge for one modifier option.
+
+**Fix:** added integrity checks at the start of per-selection processing in
+`src/server/ordering/checkout.ts` — reject a repeated `modifierId` within one line's
+`selectedModifiers`, and a repeated `optionId` within one selection's `optionIds`, both as
+`DomainError('INVALID_MODIFIER_SELECTION', ...)`.
+
+**Commit:** `3ac65d9` — "fix: reject duplicate modifier/option selections, round money at pricing
+boundary (S3 final review, INV-9)"
+
+**Status:** ✅ fixed.
+
+---
+
 ## How to use this document
 
 Log an entry when a review, test failure, or manual check reveals something that was actually
